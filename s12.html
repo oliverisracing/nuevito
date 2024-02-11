@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drag Race Simulator</title>
+    <style>
+        /* Add some basic styles for the output and queens */
+        #output {
+            font-family: Arial, sans-serif;
+            margin-top: 20px;
+        }
+        .episode {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #f2f2f2; /* light gray */
+}
+        .queen {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .queen img {
+    width: 75px;
+    height: auto;
+    border-radius: 5px;
+}
+.queen.winner {
+    color: white;
+    font-weight: bold;
+}
+        .winner {
+            background-color: royalblue;
+        }
+        .high {
+            background-color: lightblue;
+        }
+        .low {
+            background-color: lightpink;
+        }
+        .bottom {
+            background-color: tomato;
+        }
+        .eliminated {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>RuPaul's Drag Race Season Simulator</h1>
+    <button onclick="simulateSeason()">Start Simulation</button>
+    <div id="output"></div>
+    <form id="eliminationForm" style="display: none;">
+        <label for="eliminatedQueen">Which queen would you like to eliminate? Type 'none' for a double save: </label>
+        <input type="text" id="eliminatedQueen" name="eliminatedQueen">
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+// Importing the random module in Python is equivalent to Math.random() in JavaScript
+// But there's no need to import anything in JavaScript, so we'll skip that part
+let cast_s13 = ["Denali", "Elliott with 2 Ts", "Gottmik", "Joey Jay", "Kahmora Hall", "Kandy Muse", "LaLa Ri", "Olivia Lux", "Rose", "Symone", "Tamisha Iman", "Tina Burner", "Utica Queen"];
+let cast_s12 = ["Aiden Zhane", "Brita", "Crystal Methyd", "Dahlia Sin", "Gigi Goode", "Heidi N Closet", "Jackie Cox", "Jaida Essence Hall", "Jan", "Nicky Doll", "Rock M. Sakura", "Sherry Pie", "Widow Von'Du"];
+let cast_s11 = ["A'keria C. Davenport", "Ariel Versace", "Brooke Lynn Hytes", "Honey Davenport", "Kahanna Montrese", "Mercedes Iman Diamond", "Nina West", "Plastique Tiara", "Ra'jah O'Hara", "Scarlet Envy", "Shuga Cain", "Silky Nutmeg Ganache", "Soju", "Vanessa Vanjie Mateo", "Yvie Oddly"];
+let cast_s10 = ["Aquaria", "Asia O'Hara", "Blair St. Clair", "Dusty Ray Bottoms", "Eureka", "Kalorie Karbdashian-Williams", "Kameron Michaels", "Mayhem Miller", "Miz Cracker", "Monique Heart", "Monét X Change", "The Vixen", "Vanessa Vanjie Mateo", "Yuhua Hamasaki"];
+let cast_uk2 = ["A'Whora", "Asttina Mandella", "Bimini Bon-Boulash", "Cherry Valentine", "Ellie Diamond", "Ginny Lemon", "Joe Black", "Lawrence Chaney", "Sister Sister", "Tayce", "Tia Kofi", "Veronica Green"];
+let cast_uk1 = ["Baga Chipz", "Blu Hydrangea", "Cheryl Hole", "Crystal", "Divina De Campo", "Gothy Kendoll", "Scaredy Kat", "Sum Ting Wong", "The Vivienne", "Vinegar Strokes"];
+
+// Define the stats for each queen based on their performance in the original season
+let queen_stats_s11 = {
+    "A'keria C. Davenport": {"comedy": 4, "dance": 10, "acting": 6, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 9, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3a/A%27keriaCDavenportS11CastMug.jpg/revision/latest?cb=20210831152524"},
+    "Ariel Versace": {"comedy": 4, "dance": 5, "acting": 3, "fashion": 7, "runway": 7, "improv": 4, "snatch_game": 4, "lipsync": 5, "ball": 7, "makeover": 7, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/4/42/ArielVersaceS11CastMug.jpg/revision/latest?cb=20210831152449"},
+    "Brooke Lynn Hytes": {"comedy": 4, "dance": 8, "acting": 6, "fashion": 12, "runway": 10, "improv": 6, "snatch_game": 6, "lipsync": 10, "ball": 13, "makeover": 13, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/7/75/BrookeLynnHytesS11CastMug.jpg/revision/latest?cb=20210831152558"},
+    "Honey Davenport": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/f/f1/HoneyDavenportS11CastMug.jpg/revision/latest?cb=20210831152652"},
+    "Kahanna Montrese": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/8/8c/KahannaMontreseS11CastMug.jpg/revision/latest?cb=20210831152729"},
+    "Mercedes Iman Diamond": {"comedy": 2, "dance": 4, "acting": 2, "fashion": 4, "runway": 4, "improv": 2, "snatch_game": 2, "lipsync": 4, "ball": 4, "makeover": 4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/8/8c/MercedesImanDiamondS11CastMug.jpg/revision/latest?cb=20210831152824"},
+    "Nina West": {"comedy": 8, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 9, "snatch_game": 9, "lipsync": 6, "ball": 6, "makeover": 5, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/9/97/NinaWestS11CastMug.jpg/revision/latest?cb=20210831152853"},
+    "Plastique Tiara": {"comedy": 4, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/4/44/PlastiqueTiaraS11CastMug.jpg/revision/latest?cb=20210907152402"},
+    "Ra'jah O'Hara": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/f/f8/Ra%27JahO%27HaraS11CastMug.jpg/revision/latest?cb=20210831153040"},
+    "Scarlet Envy": {"comedy": 4, "dance": 6, "acting": 12, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3b/ScarletEnvyS11CastMug.jpg/revision/latest?cb=20210831153122"},
+    "Shuga Cain": {"comedy": 8, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/d/d5/ShugaCainS11CastMug.jpg/revision/latest?cb=20210831153221"},
+    "Silky Nutmeg Ganache": {"comedy": 10, "dance": 9, "acting": 6, "fashion": 6, "runway": 6, "improv": 10, "snatch_game": 10, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/5/5e/SilkyNutmegGanacheS11CastMug.jpg/revision/latest?cb=20210831153343"},
+    "Soju": {"comedy": 1, "dance": 1, "acting": 2, "fashion": 1, "runway": 4, "improv": 2, "snatch_game": 2, "lipsync": 4, "ball": 1, "makeover": 4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/0/02/SojuS11CastMug.jpg/revision/latest?cb=20210831153424"},
+    "Vanessa Vanjie Mateo": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/e/e8/VanessaVanjieMateoS11CastMug.jpg/revision/latest?cb=20210831153455"},
+    "Yvie Oddly": {"comedy": 6, "dance": 10, "acting": 10, "fashion": 10, "runway": 10, "improv": 6, "snatch_game": 5, "lipsync": 10, "ball": 10, "makeover": 7, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3c/YvieOddlyS11CastMug.jpg/revision/latest?cb=20210831153546"}
+};
+
+let queen_stats_s13 = {
+    "Denali": {"comedy": 4, "dance": 13, "acting": 6, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 11, "rumix": 15, "ball": 8, "makeover": 5, "rusical": 13},
+    "Elliott with 2 Ts": {"comedy": 4, "dance": 9, "acting": 8, "fashion": 7, "runway": 7, "improv": 4, "snatch_game": 3, "rumix": 9, "ball": 7, "makeover": 6, "rusical": 9},
+    "Gottmik": {"comedy": 12, "dance": 6, "acting": 9, "fashion": 12, "runway": 10, "improv": 9, "snatch_game": 15, "rumix": 6, "ball": 13, "makeover": 13, "rusical": 11},
+    "Joey Jay": {"comedy": 4, "dance": 8, "acting": 8, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "rumix": 7, "ball": 4, "makeover": 6, "rusical": 8},
+    "Kahmora Hall": {"comedy": 4, "dance": 4, "acting": 3, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "rumix": 6, "ball": 6, "makeover": 8, "rusical": 6},
+    "Kandy Muse": {"comedy": 15, "dance": 9, "acting": 12, "fashion": 4, "runway": 4, "improv": 10, "snatch_game": 9, "rumix": 8, "ball": 8, "makeover": 10, "rusical": 5},
+    "LaLa Ri": {"comedy": 8, "dance": 10, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 8, "rumix": 10, "ball": 2, "makeover": 6, "rusical": 6},
+    "Olivia Lux": {"comedy": 10, "dance": 15, "acting": 8, "fashion": 6, "runway": 6, "improv": 11, "snatch_game": 5, "rumix": 12, "ball": 8, "makeover": 6, "rusical": 6},
+    "Rose": {"comedy": 11, "dance": 12, "acting": 13, "fashion": 1, "runway": 4, "improv": 13, "snatch_game": 13, "rumix": 14, "ball": 10, "makeover": 6, "rusical": 15},
+    "Symone": {"comedy": 6, "dance": 10, "acting": 15, "fashion": 6, "runway": 6, "improv": 11, "snatch_game": 9, "rumix": 15, "ball": 6, "makeover": 15, "rusical": 5},
+    "Tamisha Iman": {"comedy": 6, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 7, "snatch_game": 5, "rumix": 8, "ball": 5, "makeover": 5, "rusical": 6},
+    "Tina Burner": {"comedy": 8, "dance": 9, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 7, "rumix": 8, "ball": 8, "makeover": 5, "rusical": 6},
+    "Utica Queen": {"comedy": 2, "dance": 9, "acting": 8, "fashion": 10, "runway": 10, "improv": 6, "snatch_game": 2, "rumix": 9, "ball": 15, "makeover": 15, "rusical": 9}
+};
+
+let queens_stats_uk2 = {
+    "A'Whora": {"comedy": 6, "dance": 8, "acting": 6, "fashion": 10, "runway": 10, "improv": 6, "snatch_game": 6, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
+    "Asttina Mandella": {"comedy": 6, "dance": 10, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
+    "Bimini Bon-Boulash": {"comedy": 8, "dance": 8, "acting": 8, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
+    "Cherry Valentine": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
+    "Ellie Diamond": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
+    "Ginny Lemon": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
+    "Joe Black": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
+    "Lawrence Chaney": {"comedy": 8, "dance": 8, "acting": 8, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
+    "Sister Sister": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
+    "Tayce": {"comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
+    "Tia Kofi": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
+    "Veronica Green": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6}
+};
+
+let queen_stats_s10 = {
+    "Aquaria": {"comedy": 8, "dance": 8, "acting": 6, "fashion": 11, "runway": 10, "improv": 6, "snatch_game": 10, "lipsync": 10, "ball": 10, "makeover": 8},
+    "Asia O'Hara": {"comedy": 9, "dance": 8, "acting": 10, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8},
+    "Blair St. Clair": {"comedy": 4, "dance": 6, "acting": 8, "fashion": 9, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8},
+    "Dusty Ray Bottoms": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6},
+    "Eureka": {"comedy": 11, "dance": 6, "acting": 6, "fashion": 8, "runway": 6, "improv": 11, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6},
+    "Kalorie Karbdashian-Williams": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6},
+    "Kameron Michaels": {"comedy": 4, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8},
+    "Mayhem Miller": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 15, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6},
+    "Miz Cracker": {"comedy": 8, "dance": 6, "acting": 8, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "lipsync": 8, "ball": 8, "makeover": 12},
+    "Monique Heart": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 6, "makeover": 6},
+    "Monét X Change": {"comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 8, "lipsync": 8, "ball": 8, "makeover": 8},
+    "The Vixen": {"comedy": 6, "dance": 10, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 6, "makeover": 6},
+    "Vanessa Vanjie Mateo": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6},
+    "Yuhua Hamasaki": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6}
+};
+
+let challenges_s10 = {
+    "10s Across The Board": "fashion",
+    "PharmaRusical": "dance",
+    "Tap That App": "acting",
+    "The Last Ball on Earth": "ball",
+    "The Bossy Rossy Show": "improv",
+    "Drag Con Panel Extravaganza": "comedy",
+    "Snatch Game": "snatch_game",
+    "Cher: The Unauthorized Rusical": "dance",
+    "Breastworld": "acting",
+    "Social Media Kings Into Queens": "makeover",
+    "Evil Twins": "acting",
+};
+
+let challenges_uk2 = {
+    "Rats: The Rusical": "dance",
+    "Morning Glory": "acting",
+    "Who Wore It Best": "fashion",
+    "Lockdown Supersheroes": "makeover",
+    "The Snatch Game": "snatch_game",
+    "The Rusical": "dance",
+    "The Big Drag Do": "improv",
+    "BeastEnders": "acting",
+    "The Family That Slays Together": "makeover",
+    "The Grand Finale": "fashion",
+};
+
+let challenges_s13 = {
+    "Condragulations": "rumix",
+    "Phenomenon": "rumix",
+    "RuPaulmark Channel": "acting",
+    "The Bag Ball": "ball",    
+    "Disco-Mentary": "dance",
+    "Bossy Rossy Ruboot": "improv",
+    "Social Media: The Unverified Rusical": "rusical",
+    "Snatch Game": "snatch_game",
+    "Freaky Friday Queens": "makeover",
+    "Pop! Goes The Queens": "dance",
+    "Nice Girls Roast": "comedy",
+    "Henny, I Shrunk The Drag Queens!": "acting",
+};
+
+// Define the challenges of RuPaul's Drag Race Season 11
+let challenges_s11 = {
+    "Whatcha Unpackin?": "fashion",
+    "Good God, Girl Get Out": "acting",
+    "Diva Worship": "improv",
+    "Trump: The Rusical": "dance",
+    "Monster Ball": "ball",
+    "The Draglympics": "dance",
+    "From Farm To Runway": "fashion",
+    "Snatch Game At Sea": "snatch_game",
+    "L.A.D.P.!": "improv",
+    "Dragracadabra": "improv",
+    "Bring Back My Queens!": "makeover",
+    "Queens Everywhere": "dance",
+};
+
+// Define the stats for each queen based on their performance in the original season
+let queen_stats_s12 = {
+    "Aiden Zhane": {"comedy": 2, "dance": 3, "acting": 2, "fashion": 3, "runway": 3, "improv": 2, "snatch_game": 2, "lipsync": 3, "ball": 3, "makeover":4,},
+    "Brita": {"comedy": 3, "dance": 4, "acting": 3, "fashion": 3, "runway": 4, "improv": 4, "snatch_game": 3, "lipsync": 4, "ball": 4, "makeover": 4},
+    "Crystal Methyd": {"comedy": 7, "dance": 4, "acting": 4, "fashion": 5, "runway": 8, "improv": 6, "snatch_game": 7, "lipsync": 4, "ball": 4, "makeover": 8},
+    "Dahlia Sin": {"comedy": 2, "dance": 3, "acting": 2, "fashion": 4, "runway": 4, "improv": 3, "snatch_game": 2, "lipsync": 3, "ball": 3, "makeover": 3},
+    "Gigi Goode": {"comedy": 4, "dance": 7, "acting": 6, "fashion": 7, "runway": 9, "improv": 6, "snatch_game": 10, "lipsync": 6, "ball": 10, "makeover": 8},
+    "Heidi N Closet": {"comedy": 6, "dance": 5, "acting": 3, "fashion": 3, "runway": 3, "improv": 4, "snatch_game": 4, "lipsync": 10, "ball": 3, "makeover": 3},
+    "Jackie Cox": {"comedy": 4, "dance": 3, "acting": 4, "fashion": 3, "runway": 3, "improv": 4, "snatch_game": 4, "lipsync": 3, "ball": 3, "makeover": 3},
+    "Jaida Essence Hall": {"comedy": 6, "dance": 8, "acting": 7, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 8, "makeover": 11},
+    "Jan": {"comedy": 4, "dance": 7, "acting": 4, "fashion": 4, "runway": 4, "improv": 4, "snatch_game": 4, "lipsync": 4, "ball": 4, "makeover": 4},
+    "Nicky Doll": {"comedy": 2, "dance": 3, "acting": 2, "fashion": 7, "runway": 7, "improv": 2, "snatch_game": 2, "lipsync": 3, "ball": 7, "makeover": 7},
+    "Rock M. Sakura": {"comedy": 4, "dance": 4, "acting": 3, "fashion": 3, "runway": 3, "improv": 4, "snatch_game": 4, "lipsync": 3, "ball": 3, "makeover": 3},
+    "Sherry Pie": {"comedy": 8, "dance": 3, "acting": 10, "fashion": 4, "runway": 4, "improv": 10, "snatch_game": 8, "lipsync": 3, "ball": 4, "makeover": 4},
+    "Widow Von'Du": {"comedy": 4, "dance": 9, "acting": 7, "fashion": 6, "runway": 6, "improv": 7, "snatch_game": 6, "lipsync": 12, "ball": 6, "makeover": 3}
+};
+
+// Define the challenges of RuPaul's Drag Race Season 12
+let challenges_s12 = {
+    "I'm That Bitch": "dance",
+    "You Don't Know Me": "dance",
+    "World's Worst": "acting",
+    "The Ball Ball": "ball",
+    "Gay's Anatomy": "improv",
+    "Snatch Game": "snatch_game",
+    "Madonna: The Unauthorized Rusical": "dance",
+    "Droop": "improv",
+    "Choices 2020": "acting",
+    "Superfan Makeover": "makeover",
+    "One-Queen Show": "comedy",
+    "Viva Drag Vegas": "dance"
+};
+
+// Define the cast and challenges for each season
+let seasons = {
+    '11': [cast_s11, challenges_s11, queen_stats_s11],
+    '12': [cast_s12, challenges_s12, queen_stats_s12],
+    '10': [cast_s10, challenges_s10, queen_stats_s10],
+    '13': [cast_s13, challenges_s13, queen_stats_s13],
+};
+
+// Function to shuffle an array
+function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
+
+async function simulateSeason() {
+    // Ask the user to choose a season
+    let season = prompt("Which season would you like to simulate? ");
+    while (!(season in seasons)) {
+        season = prompt("Invalid input. Please choose a valid season: ");
+    }
+
+    // Get the cast, challenges, and queen stats for the chosen season
+    let cast = seasons[season][0];
+    let challenges = seasons[season][1];
+    let queen_stats = seasons[season][2];
+
+    // Check if the season is 12 or 13 for the double premiere feature
+    let double_premiere = (season == '12' || season == '13');
+
+    // Shuffle the cast
+    cast = shuffle(cast);
+
+    // Split the cast into two groups if it's a double premiere
+    let group1 = double_premiere ? cast.slice(0, cast.length / 2) : cast;
+    let group2 = double_premiere ? cast.slice(cast.length / 2) : [];
+
+    // Iterate over each challenge
+    for (let i = 0; i < Object.keys(challenges).length; i++) {
+        let challenge = Object.keys(challenges)[i];
+
+        // Choose the group of queens for this episode
+        let episode_cast = (double_premiere && i < 2) ? (i == 0 ? group1 : group2) : cast;
+
+        // Display the remaining queens
+        let output = document.getElementById('output');
+        output.innerHTML += `<div class="episode"><h2>Episode ${i+1}: ${challenge}</h2></div>`;
+        for (let queen of episode_cast) {
+            output.innerHTML += `<div class="queen">${queen}</div>`;
+        }
+
+        // If there are less than 2 queens left, end the season
+        if (episode_cast.length < 2) {
+            break;
+        }
+
+        // Calculate scores for each queen
+        let scores = {};
+        for (let j = 0; j < episode_cast.length; j++) {
+            let queen = episode_cast[j];
+            // Adjust the range of the random multiplier for more randomness (e.g., from 0.5 to 1.5)
+            scores[queen] = queen_stats[queen][challenges[challenge]] * (Math.random() * (1.5 - 0.5) + 0.5);
+        }
+
+        // Sort queens based on their scores
+        let sorted_queens = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+
+        // Assign placements based on scores
+        let winner = sorted_queens[0];
+        let high_queens = sorted_queens.slice(1, 3);
+        let low_queen = sorted_queens[sorted_queens.length - 3];
+        let bottom_2 = sorted_queens.slice(sorted_queens.length - 2);
+
+// Display the placements
+output.innerHTML += `<br><div class="queen winner"><img src="${queen_stats[winner].image}" alt="${winner}" width="100"><strong>${winner} (${scores[winner].toFixed(2)})</strong><br>Congratulations, you are the winner of this challenge!</div><br>`;
+for (let queen of high_queens) {
+    output.innerHTML += `<div class="queen high"><img src="${queen_stats[queen].image}" alt="${queen}" width="100"><strong>${queen} (${scores[queen].toFixed(2)})</strong><br>You are safe, good job!</div>`;
+}
+output.innerHTML += `<br><div class="queen low"><img src="${queen_stats[low_queen].image}" alt="${low_queen}" width="100"><strong>${low_queen} (${scores[low_queen].toFixed(2)})</strong><br>Step it up, you are safe.</div><br>`;
+for (let queen of bottom_2) {
+    output.innerHTML += `<div class="queen bottom"><img src="${queen_stats[queen].image}" alt="${queen}" width="100"><strong>${queen} (${scores[queen].toFixed(2)})</strong><br>I'm sorry my dear but you are up for elimination.</div>`;
+}
+output.innerHTML += `<br>`;
+
+        // If it's the first two episodes of season 12 or 13, no queens are eliminated
+        if (double_premiere && i < 2) {
+            continue;
+        }
+
+        // Ask the user to choose which queen to eliminate
+        let eliminated = await new Promise(resolve => {
+            document.getElementById('eliminationForm').style.display = 'block';
+            document.getElementById('eliminationForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                let eliminated = document.getElementById('eliminatedQueen').value;
+                document.getElementById('eliminationForm').style.display = 'none';
+                resolve(eliminated);
+            });
+        });
+
+        if (eliminated != 'none') {               
+            output.innerHTML += `<div class="queen eliminated">${eliminated}</div><br>`;
+            // Remove the eliminated queen from the cast
+            cast = cast.filter(queen => queen !== eliminated);
+        }
+    }
+
+    // The last queen remaining is the winner of the season
+    console.log(`\nThe winner of RuPaul's Drag Race Season ${season} is ${cast[0]}!`);
+
+    // Print the track record
+    console.log("\nTrack Record:");
+    for (let queen in track_record) {
+        console.log(`${queen}: ${track_record[queen].join(' ')}`);
+    }
+}
+
+// Call the function to simulate a season
+simulateSeason();
+    </script>
+</body>
+</html>
