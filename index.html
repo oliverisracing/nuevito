@@ -3,18 +3,46 @@
 <head>
     <title>Drag Race Simulator</title>
     <style>
-        /* Add some basic styles for the output and queens */
-        #output {
-            font-family: Arial, sans-serif;
-            margin-top: 20px;
-        }
+        body {
+    background-image: linear-gradient(to right, #f969bd, #ffcc6c); /*  Pink to orange gradient */
+    height: 100vh; /* Makes the gradient cover the full viewport height */
+    margin: 0;  /* Removes default browser margins */
+}
+#output { 
+    font-family: 'Roboto', sans-serif;
+    margin: 20px auto; /* Centers the output horizontally */
+    width: 80%; /* Limits the width for better readability */
+    padding: 20px;
+    border-radius: 10px; 
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+}
+
+button {
+    border: none;
+    padding: 15px 30px; 
+    font-size: 18px; 
+    font-family: inherit; /* Inherits the same font as the rest of the page */
+    cursor: pointer;
+    border-radius: 8px; 
+    background-color: #F497D0; /* Bright pink */
+    color: white;
+    display: block;  /* Ensures button acts as a block-level element */
+    margin: 20px auto; /* Top/bottom margin, auto margins on the sides for centering */
+}
         .episode {
     margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid black;
+    border: 0,1px solid black;
     border-radius: 5px;
-    background-color: #f2f2f2; /* light gray */
+        text-align: center;
+    background-color: #f969bd; /* light gray */
+    color: white;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2); 
+    width: 700px;
+    margin: 6px auto;
 }
+
 .wikitable {
         background-color:#f8f9fa;
         color:#202122;
@@ -48,9 +76,10 @@
         width: 10ch;  
     }
     .WIN { background-color: royalblue; color: white; font-weight: bold; }  
+    .WIN-SECOND { background-color: yellow; color: rgb(0, 0, 0); font-weight: bold; }
     .TOP2 { background-color: cyan; }
     .HIGH { background-color: lightblue; }
-    .SAFE { background-color: f5ebf5; }
+    .SAFE { background-color: cornsilk; }
     .LOW { background-color: lightpink; }
     .BTM2 { background-color: tomato; }
     .ELIM { background-color: red; }
@@ -64,45 +93,111 @@
     .dark-gray {
         background-color: darkgray;
     }
-
+    .queen-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Creates as many 120px columns as possible */
+    gap: 10px; /* Space between items */
+    justify-content: center; /* Center the items on the page */
+    padding: 20px; /* Space around the outside of the grid */
+}
+.grayscale {
+    filter: grayscale(100%);
+}
 .queen {
-    display: inline-block;
-    margin: 5px;
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center text vertically */
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
+    background-color: #f2e4f2; /* Light pink background */
+    color: #000000; /* Dark blue text */
     font-weight: bold;
 }
-
 .placement {
     display: flex;
-    justify-content: space-between; /* Align items to the edges */
     align-items: center;
-    margin: 5px auto; /* Auto left and right margins */
+    border: 1 px solid #000000;
+    border-radius: 20px;
+    margin: 10px 0;
     padding: 10px;
-    border: 1px solid black;
-    border-radius: 5px;
-    font-weight: bold;
-    width: 350px; /* Adjust as needed */
-    height: 150px; /* Adjust as needed */
-    overflow: auto; /* Add a scrollbar if the content is too large */
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
 }
 
 .placement img {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.placement span {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#eliminationForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#eliminationForm select,
+#eliminationForm input[type="submit"] {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+#eliminationForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#eliminationForm select, #eliminationForm input[type="submit"] {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
     border-radius: 5px;
-    margin-right: 15px; /* Add some space between the image and the text */
+    background-color: #f2e4f2; /* Light pink background */
+    color: #0a2379; /* Dark blue text */
+    font-weight: bold;
+}
+
+ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0;
+    display: flex; /* Arrange items in a row */
+    flex-wrap: wrap; /* Allow items to wrap onto the next line */
+    justify-content: center; /* Center items horizontally */
+}
+
+li {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f2e4f2; /* Light pink background */
+    color: #0a2379; /* Dark blue text */
+    font-weight: bold;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2); 
 }
 
 .placement.winner {
     color: white;
     font-weight: bold;
 }
-
-.placement strong {
-    font-size: 14px; /* Adjust as needed */
+.placement.bottom {
+    font-weight: bold;
 }
+
         .winner {
             background-color: royalblue;
         }
@@ -112,21 +207,41 @@
         .low {
             background-color: lightpink;
         }
+        .safe {
+            background-color: cornsilk;
+        }
         .top2 {
             background-color: cyan;
         }
         .bottom {
             background-color: tomato;
         }
-        .eliminated {
-            background-color: red;
+        .returning {
+            background-color: rgb(132, 255, 142);
         }
-
-        .track-record table {
-    width: 100%;
-    border-collapse: collapse;
+        .eliminated img {
+    filter: grayscale(100%);
+}
+.winner-first {
+    background-color: royalblue;
+    color: #fff; /* Set the text color to white for better contrast */
 }
 
+.winner-second {
+    background-color: yellow;
+}
+        #track-record { 
+    width: 80%;     
+    margin: 20px auto;  
+background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;    
+    border-radius: 5px; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  
+}
+.blur {
+    filter: blur(10px);
+    transition: 0.3s;
+}
 .track-record td {
     border: 1px solid #ddd;
     padding: 8px;
@@ -149,9 +264,13 @@
     </form>
 
     <script>
+        let eliminatedQueens = []; // Array to hold eliminated queens
+        let castCopy; // Define castCopy at the top level of your script
+
         let trackRecord = {};
 // Importing the random module in Python is equivalent to Math.random() in JavaScript
 // But there's no need to import anything in JavaScript, so we'll skip that part
+let cast_pokemon01 = ["Milotic", "Gardevoir", "Tsareena", "Lopunny", "Gothitelle", "Mismagius", "Sylveon", "Glaceon", "Vespiquen", "Florges", "Lilligant", "Roserade", "Leafeon", "Shiinotic"];
 let cast_s13 = ["Denali", "Elliott with 2 Ts", "Gottmik", "Joey Jay", "Kahmora Hall", "Kandy Muse", "LaLa Ri", "Olivia Lux", "Rose", "Symone", "Tamisha Iman", "Tina Burner", "Utica Queen"];
 let cast_s12 = ["Aiden Zhane", "Brita", "Crystal Methyd", "Dahlia Sin", "Gigi Goode", "Heidi N Closet", "Jackie Cox", "Jaida Essence Hall", "Jan", "Nicky Doll", "Rock M. Sakura", "Sherry Pie", "Widow Von'Du"];
 let cast_s11 = ["A'keria C. Davenport", "Ariel Versace", "Brooke Lynn Hytes", "Honey Davenport", "Kahanna Montrese", "Mercedes Iman Diamond", "Nina West", "Plastique Tiara", "Ra'jah O'Hara", "Scarlet Envy", "Shuga Cain", "Silky Nutmeg Ganache", "Soju", "Vanessa Vanjie Mateo", "Yvie Oddly"];
@@ -159,202 +278,294 @@ let cast_s10 = ["Aquaria", "Asia O'Hara", "Blair St. Clair", "Dusty Ray Bottoms"
 let cast_uk2 = ["A'Whora", "Asttina Mandella", "Bimini Bon-Boulash", "Cherry Valentine", "Ellie Diamond", "Ginny Lemon", "Joe Black", "Lawrence Chaney", "Sister Sister", "Tayce", "Tia Kofi", "Veronica Green"];
 let cast_uk1 = ["Baga Chipz", "Blu Hydrangea", "Cheryl Hole", "Crystal", "Divina De Campo", "Gothy Kendoll", "Scaredy Kat", "Sum Ting Wong", "The Vivienne", "Vinegar Strokes"];
 let cast_s09 = ["Aja", "Alexis Michelle", "Charlie Hides", "Cynthia Lee Fontaine", "Eureka", "Farrah Moan", "Jaymes Mansfield", "Kimora Blac", "Nina Bo'nina Brown", "Peppermint", "Sasha Velour", "Shea Couleé", "Trinity Taylor", "Valentina"];
+let cast_s03 = ["Raja", "Manila Luzon", "Alexis Mateo", "Yara Sofia", "Carmen Carrera", "Shangela", "Delta Work", "Stacy Layne Matthews", "Mariah", "India Ferrah", "Mimi Imfurst", "Phoenix", "Venus D-Lite"];
 // Define the stats for each queen based on their performance in the original season
 let queen_stats_s11 = {
-    "A'keria C. Davenport": {"comedy": 4, "dance": 10, "acting": 6, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 9, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3a/A%27keriaCDavenportS11CastMug.jpg/revision/latest?cb=20210831152524"},
-    "Ariel Versace": {"comedy": 4, "dance": 5, "acting": 3, "fashion": 7, "runway": 7, "improv": 4, "snatch_game": 4, "lipsync": 5, "ball": 7, "makeover": 7, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/4/42/ArielVersaceS11CastMug.jpg/revision/latest?cb=20210831152449"},
-    "Brooke Lynn Hytes": {"comedy": 4, "dance": 8, "acting": 6, "fashion": 12, "runway": 10, "improv": 6, "snatch_game": 6, "lipsync": 10, "ball": 13, "makeover": 13, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/7/75/BrookeLynnHytesS11CastMug.jpg/revision/latest?cb=20210831152558"},
-    "Honey Davenport": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/f/f1/HoneyDavenportS11CastMug.jpg/revision/latest?cb=20210831152652"},
-    "Kahanna Montrese": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/8/8c/KahannaMontreseS11CastMug.jpg/revision/latest?cb=20210831152729"},
-    "Mercedes Iman Diamond": {"comedy": 2, "dance": 4, "acting": 2, "fashion": 4, "runway": 4, "improv": 2, "snatch_game": 2, "lipsync": 4, "ball": 4, "makeover": 4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/8/8c/MercedesImanDiamondS11CastMug.jpg/revision/latest?cb=20210831152824"},
-    "Nina West": {"comedy": 8, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 9, "snatch_game": 9, "lipsync": 6, "ball": 6, "makeover": 5, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/9/97/NinaWestS11CastMug.jpg/revision/latest?cb=20210831152853"},
-    "Plastique Tiara": {"comedy": 4, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/4/44/PlastiqueTiaraS11CastMug.jpg/revision/latest?cb=20210907152402"},
-    "Ra'jah O'Hara": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/f/f8/Ra%27JahO%27HaraS11CastMug.jpg/revision/latest?cb=20210831153040"},
-    "Scarlet Envy": {"comedy": 4, "dance": 6, "acting": 12, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3b/ScarletEnvyS11CastMug.jpg/revision/latest?cb=20210831153122"},
-    "Shuga Cain": {"comedy": 8, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/d/d5/ShugaCainS11CastMug.jpg/revision/latest?cb=20210831153221"},
-    "Silky Nutmeg Ganache": {"comedy": 10, "dance": 9, "acting": 6, "fashion": 6, "runway": 6, "improv": 10, "snatch_game": 10, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/5/5e/SilkyNutmegGanacheS11CastMug.jpg/revision/latest?cb=20210831153343"},
-    "Soju": {"comedy": 1, "dance": 1, "acting": 2, "fashion": 1, "runway": 4, "improv": 2, "snatch_game": 2, "lipsync": 4, "ball": 1, "makeover": 4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/0/02/SojuS11CastMug.jpg/revision/latest?cb=20210831153424"},
-    "Vanessa Vanjie Mateo": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/e/e8/VanessaVanjieMateoS11CastMug.jpg/revision/latest?cb=20210831153455"},
-    "Yvie Oddly": {"comedy": 6, "dance": 10, "acting": 10, "fashion": 8, "runway": 10, "improv": 6, "snatch_game": 5, "lipsync": 10, "ball": 10, "makeover": 7, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3c/YvieOddlyS11CastMug.jpg/revision/latest?cb=20210831153546"}
+    "A'keria C. Davenport": {"rusical": 8,"comedy": 4, "dance": 10, "acting": 6, "fashion": 10, "runway": 8, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 9, "image": "Mugs/AkeriaS11.webp", "promo": "Promos/Akeria.webp"},
+    "Ariel Versace": {"rusical": 6,"comedy": 4, "dance": 5, "acting": 5, "fashion": 7, "runway": 7, "improv": 4, "snatch_game": 4, "lipsync": 5, "ball": 4, "makeover": 7, "image": "Mugs/Ariel.webp", "promo": "Promos/Ariel.webp"},
+    "Brooke Lynn Hytes": {"rusical": 10,"comedy": 4, "dance": 8, "acting": 6, "fashion": 12, "runway": 10, "improv": 6, "snatch_game": 6, "lipsync": 10, "ball": 13, "makeover": 13, "image": "Mugs/Brooke.webp", "promo": "Promos/Brooke.webp"},
+    "Honey Davenport": {"rusical": 6,"comedy": 4, "dance": 6, "acting": 4, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/HoneyDavenport.webp", "promo": "Promos/Honey.webp"},
+    "Kahanna Montrese": {"rusical": 5,"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Kahanna.webp", "promo": "Promos/Kahanna.webp"},
+    "Mercedes Iman Diamond": {"rusical": 3,"comedy": 2, "dance": 4, "acting": 2, "fashion": 5, "runway": 4, "improv": 6, "snatch_game": 2, "lipsync": 4, "ball": 4, "makeover": 4, "image": "Mugs/Mercedes.webp", "promo": "Promos/Mercedes.webp"},
+    "Nina West": {"rusical": 8,"comedy": 8, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 14, "snatch_game": 11, "lipsync": 6, "ball": 6, "makeover": 5, "image": "Mugs/NinaWest.webp", "promo": "Promos/NinaWest.webp"},
+    "Plastique Tiara": {"rusical": 8,"comedy": 4, "dance": 8, "acting": 6, "fashion": 10, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Plastique.webp", "promo": "Promos/Plastique.webp"},
+    "Ra'jah O'Hara": {"rusical": 6,"comedy": 4, "dance": 6, "acting": 5, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 9, "makeover": 6, "image": "Mugs/RajahS11.webp", "promo": "Promos/Rajah.webp"},
+    "Scarlet Envy": {"rusical": 8,"comedy": 4, "dance": 6, "acting": 12, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 9, "makeover": 6, "image": "Mugs/ScarletS11.webp", "promo": "Promos/Scarlet.webp"},
+    "Shuga Cain": {"rusical": 8,"comedy": 8, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 4, "makeover": 6, "image": "Mugs/Shuga.webp", "promo": "Promos/Shuga.webp"},
+    "Silky Nutmeg Ganache": {"rusical": 15,"comedy": 10, "dance": 9, "acting": 6, "fashion": 6, "runway": 6, "improv": 10, "snatch_game": 15, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/SilkyS11.webp", "promo": "Promos/Silky.webp"},
+    "Soju": {"rusical": 4,"comedy": 1, "dance": 1, "acting": 2, "fashion": 1, "runway": 4, "improv": 2, "snatch_game": 2, "lipsync": 4, "ball": 1, "makeover": 4, "image": "Mugs/Soju.webp", "promo": "Promos/Soju.webp"},
+    "Vanessa Vanjie Mateo": {"rusical": 8,"comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/VanessaS11.webp", "promo": "Promos/VanessaS11.webp"},
+    "Yvie Oddly": {"rusical": 11,"comedy": 6, "dance": 10, "acting": 10, "fashion": 8, "runway": 10, "improv": 11, "snatch_game": 5, "lipsync": 10, "ball": 10, "makeover": 7, "image": "Mugs/YvieS11.webp", "promo": "Promos/Yvie.webp"}
 };
 
 let queen_stats_s09 = {
-    "Aja": {"rusical": 8,"comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "./img/AjaS9CastMug.webp"},
-    "Alexis Michelle": {"rusical": 10,"comedy": 9, "dance": 8, "acting": 9, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 15, "lipsync": 8, "ball": 8, "makeover": 8, "image": "./img/AlexisMichelleS9CastMug.webp"},
-    "Charlie Hides": {"rusical": 6,"comedy": 8, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "./img/CharlieHidesS9CastMug.webp"},
-    "Cynthia Lee Fontaine": {"rusical": 6,"comedy": 8, "dance": 6, "acting": 5, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "./img/CynthiaLeeFontaineS9CastMug.webp"},
-    "Farrah Moan": {"rusical": 3,"comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 8, "improv": 4, "snatch_game": 4, "lipsync": 8, "ball": 8, "makeover": 8, "image": "./img/FarrahMoanS9CastMug.webp"},
-    "Eureka": {"rusical": 5,"comedy": 8, "dance": 6, "acting": 8, "fashion": 8, "runway": 10, "improv": 8, "snatch_game": 10, "lipsync": 6, "ball": 8, "makeover": 9, "image": "./img/EurekaS9CastMug.webp"},
-    "Jaymes Mansfield": {"rusical": 1,"comedy": 2, "dance": 3, "acting": 3, "fashion": 2, "runway": 3, "improv": 4, "snatch_game": 5, "lipsync": 6, "ball": 6, "makeover": 6, "image": "./img/JaymesMansfieldS9CastMug.webp"},
-    "Kimora Blac": {"rusical": 6,"comedy": 4, "dance": 6, "acting": 4, "fashion": 4, "runway": 4, "improv": 4, "snatch_game": 4, "lipsync": 8, "ball": 8, "makeover": 8, "image": "./img/KimoraBlacS9CastMug.webp"},
-    "Nina Bo'nina Brown": {"rusical": 7,"comedy": 7, "dance": 7, "acting": 7, "fashion": 8, "runway": 15, "improv": 8, "snatch_game": 10, "lipsync": 6, "ball": 6, "makeover": 6, "image": "./img/NinaBoninaBrown.webp"},
-    "Peppermint": {"rusical": 10,"comedy": 15, "dance": 9, "acting": 8, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "./img/PeppermintS9CastMug.webp"},
-    "Sasha Velour": {"rusical": 9,"comedy": 10, "dance": 9, "acting": 8, "fashion": 10, "runway": 11, "improv": 14, "snatch_game": 10, "lipsync": 8, "ball": 10, "makeover": 10, "image": "./img/SashaVelourS9CastMug.webp"},
-    "Shea Couleé": {"rusical": 15,"comedy": 10, "dance": 11, "acting": 12, "fashion": 11, "runway": 10, "improv": 13, "snatch_game": 9, "lipsync": 8, "ball": 14, "makeover": 6, "image": "./img/SheaCoulee.webp"},
-    "Trinity Taylor": {"rusical": 9,"comedy": 10, "dance": 9, "acting": 15, "fashion": 13, "runway": 10, "improv": 9, "snatch_game": 9, "lipsync": 6, "ball": 9, "makeover": 15, "image": "./img/TrinityTaylorS9CastMug.webp"},
-    "Valentina": {"rusical": 9, "comedy": 8, "dance": 15, "acting": 9, "fashion": 10, "runway": 12, "improv": 8, "snatch_game": 8, "lipsync": 9, "ball": 8, "makeover": 8, "image": "./img/ValentinaS9CastMug.webp"}
+    "Aja": {"rusical": 8,"comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/AjaS9.webp", "promo": "Promos/Aja.webp"},
+    "Alexis Michelle": {"rusical": 10,"comedy": 9, "dance": 8, "acting": 9, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 15, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Alexis.webp", "promo": "Promos/Alexis.webp"},
+    "Charlie Hides": {"rusical": 6,"comedy": 8, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Charlie.webp", "promo": "Promos/Charlie.webp"},
+    "Cynthia Lee Fontaine": {"rusical": 6,"comedy": 8, "dance": 6, "acting": 5, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/CynthiaS9.webp", "promo": "Promos/Cynthia.webp"},
+    "Farrah Moan": {"rusical": 3,"comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 8, "improv": 4, "snatch_game": 4, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/FarrahS9.webp", "promo": "Promos/Farrah.webp"},
+    "Eureka": {"rusical": 5,"comedy": 8, "dance": 6, "acting": 8, "fashion": 8, "runway": 10, "improv": 8, "snatch_game": 10, "lipsync": 6, "ball": 8, "makeover": 9, "image": "Mugs/EurekaS9.webp", "promo": "Promos/EurekaS9.webp"},
+    "Jaymes Mansfield": {"rusical": 1,"comedy": 2, "dance": 3, "acting": 3, "fashion": 2, "runway": 3, "improv": 4, "snatch_game": 5, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Jaymes.webp", "promo": "Promos/Jaymes.webp"},
+    "Kimora Blac": {"rusical": 6,"comedy": 4, "dance": 6, "acting": 4, "fashion": 4, "runway": 4, "improv": 4, "snatch_game": 4, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Kimora.webp", "promo": "Promos/Kimora.webp"},
+    "Nina Bo'nina Brown": {"rusical": 7,"comedy": 7, "dance": 7, "acting": 7, "fashion": 8, "runway": 15, "improv": 8, "snatch_game": 10, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Nina.webp", "promo": "Promos/Nina.webp"},
+    "Peppermint": {"rusical": 10,"comedy": 15, "dance": 9, "acting": 8, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Peppermint.webp", "promo": "Promos/Peppermint.webp"},
+    "Sasha Velour": {"rusical": 9,"comedy": 10, "dance": 9, "acting": 8, "fashion": 10, "runway": 11, "improv": 14, "snatch_game": 10, "lipsync": 8, "ball": 10, "makeover": 10, "image": "Mugs/SashaVelour.webp", "promo": "Promos/SashaV.webp"},
+    "Shea Couleé": {"rusical": 15,"comedy": 10, "dance": 11, "acting": 12, "fashion": 11, "runway": 10, "improv": 13, "snatch_game": 9, "lipsync": 8, "ball": 14, "makeover": 6, "image": "Mugs/SheaS9.webp", "promo": "Promos/Shea.webp"},
+    "Trinity Taylor": {"rusical": 9,"comedy": 10, "dance": 9, "acting": 15, "fashion": 13, "runway": 10, "improv": 9, "snatch_game": 9, "lipsync": 6, "ball": 9, "makeover": 15, "image": "Mugs/TrinityS9.webp", "promo": "Promos/Trinity.webp"},
+    "Valentina": {"rusical": 9, "comedy": 8, "dance": 15, "acting": 9, "fashion": 10, "runway": 12, "improv": 8, "snatch_game": 8, "lipsync": 9, "ball": 8, "makeover": 8, "image": "Mugs/ValentinaS9.webp", "promo": "Promos/Valentina.webp"}
 };
 let queen_stats_s13 = {
-    "Denali": {"comedy": 4, "dance": 13, "acting": 6, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 11, "rumix": 15, "ball": 8, "makeover": 5, "rusical": 13},
-    "Elliott with 2 Ts": {"comedy": 4, "dance": 9, "acting": 8, "fashion": 7, "runway": 7, "improv": 4, "snatch_game": 3, "rumix": 9, "ball": 7, "makeover": 6, "rusical": 9},
-    "Gottmik": {"comedy": 12, "dance": 6, "acting": 9, "fashion": 12, "runway": 10, "improv": 9, "snatch_game": 15, "rumix": 6, "ball": 13, "makeover": 13, "rusical": 11},
-    "Joey Jay": {"comedy": 4, "dance": 8, "acting": 8, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "rumix": 7, "ball": 4, "makeover": 6, "rusical": 8},
-    "Kahmora Hall": {"comedy": 4, "dance": 4, "acting": 3, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "rumix": 6, "ball": 6, "makeover": 8, "rusical": 6},
-    "Kandy Muse": {"comedy": 15, "dance": 9, "acting": 12, "fashion": 4, "runway": 4, "improv": 10, "snatch_game": 9, "rumix": 8, "ball": 8, "makeover": 10, "rusical": 5},
-    "LaLa Ri": {"comedy": 8, "dance": 10, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 8, "rumix": 10, "ball": 2, "makeover": 6, "rusical": 6},
-    "Olivia Lux": {"comedy": 10, "dance": 15, "acting": 8, "fashion": 6, "runway": 6, "improv": 13, "snatch_game": 5, "rumix": 12, "ball": 8, "makeover": 6, "rusical": 6},
-    "Rose": {"comedy": 11, "dance": 10, "acting": 13, "fashion": 8, "runway": 4, "improv": 11, "snatch_game": 11, "rumix": 14, "ball": 10, "makeover": 8, "rusical": 15},
-    "Symone": {"comedy": 6, "dance": 10, "acting": 15, "fashion": 6, "runway": 6, "improv": 11, "snatch_game": 9, "rumix": 15, "ball": 6, "makeover": 15, "rusical": 5},
-    "Tamisha Iman": {"comedy": 6, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 7, "snatch_game": 5, "rumix": 8, "ball": 5, "makeover": 5, "rusical": 6},
-    "Tina Burner": {"comedy": 8, "dance": 9, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 7, "rumix": 8, "ball": 8, "makeover": 5, "rusical": 6},
-    "Utica Queen": {"comedy": 2, "dance": 9, "acting": 8, "fashion": 10, "runway": 10, "improv": 6, "snatch_game": 2, "rumix": 9, "ball": 15, "makeover": 15, "rusical": 9}
-};
-
-let queens_stats_uk2 = {
-    "A'Whora": {"comedy": 6, "dance": 8, "acting": 6, "fashion": 10, "runway": 10, "improv": 6, "snatch_game": 6, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
-    "Asttina Mandella": {"comedy": 6, "dance": 10, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
-    "Bimini Bon-Boulash": {"comedy": 8, "dance": 8, "acting": 8, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
-    "Cherry Valentine": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
-    "Ellie Diamond": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
-    "Ginny Lemon": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
-    "Joe Black": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
-    "Lawrence Chaney": {"comedy": 8, "dance": 8, "acting": 8, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
-    "Sister Sister": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
-    "Tayce": {"comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "rumix": 8, "ball": 8, "makeover": 8, "rusical": 8},
-    "Tia Kofi": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6},
-    "Veronica Green": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 6, "makeover": 6, "rusical": 6}
+"Denali": {"comedy": 4, "dance": 13, "acting": 6, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 11, "rumix": 20, "ball": 8, "makeover": 5, "rusical": 13, "image": "Mugs/Denali.webp", "promo": "Promos/Denali.webp"}, 
+ "Elliott with 2 Ts": {"comedy": 4, "dance": 9, "acting": 8, "fashion": 7, "runway": 7, "improv": 4, "snatch_game": 3, "rumix": 9, "ball": 7, "makeover": 6, "rusical": 9, "image": "Mugs/Eliott.webp", "promo": "Promos/Eliott.webp"}, 
+ "Gottmik": {"comedy": 12, "dance": 6, "acting": 9, "fashion": 12, "runway": 10, "improv": 9, "snatch_game": 15, "rumix": 6, "ball": 13, "makeover": 13, "rusical": 11, "image": "Mugs/Gottmik.webp", "promo": "Promos/Gottmik.webp"},
+  "Joey Jay": {"comedy": 4, "dance": 8, "acting": 8, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "rumix": 7, "ball": 4, "makeover": 6, "rusical": 8, "image": "Mugs/Joey.webp", "promo": "Promos/Joey.webp"}, 
+  "Kahmora Hall": {"comedy": 4, "dance": 4, "acting": 3, "fashion": 6, "runway": 6, "improv": 4, "snatch_game": 4, "rumix": 6, "ball": 6, "makeover": 8, "rusical": 6, "image": "Mugs/Kahmora.webp", "promo": "Promos/Kahmora.webp"}, 
+  "Kandy Muse": {"comedy": 15, "dance": 9, "acting": 12, "fashion": 4, "runway": 4, "improv": 10, "snatch_game": 9, "rumix": 8, "ball": 8, "makeover": 10, "rusical": 5, "image": "Mugs/KandyMuse.webp", "promo": "Promos/KandyMuse.webp"},
+   "LaLa Ri": {"comedy": 8, "dance": 10, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 8, "rumix": 10, "ball": 2, "makeover": 6, "rusical": 6, "image": "Mugs/Lala.webp", "promo": "Promos/Lalari.webp"}, 
+   "Olivia Lux": {"comedy": 10, "dance": 15, "acting": 8, "fashion": 6, "runway": 6, "improv": 13, "snatch_game": 5, "rumix": 12, "ball": 8, "makeover": 6, "rusical": 6, "image": "Mugs/Liv.webp", "promo": "Promos/Liv.webp"}, 
+      "Rose": {"comedy": 11, "dance": 10, "acting": 13, "fashion": 8, "runway": 4, "improv": 11, "snatch_game": 11, "rumix": 14, "ball": 10, "makeover": 8, "rusical": 15, "image": "Mugs/Rose.webp", "promo": "Promos/Rose.webp"},
+    "Symone": {"comedy": 6, "dance": 10, "acting": 15, "fashion": 6, "runway": 6, "improv": 11, "snatch_game": 9, "rumix": 20, "ball": 6, "makeover": 15, "rusical": 5, "image": "Mugs/Symone.webp", "promo": "Promos/Symone.webp"},
+    "Tamisha Iman": {"comedy": 6, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 7, "snatch_game": 5, "rumix": 8, "ball": 5, "makeover": 5, "rusical": 6, "image": "Mugs/Tamisha.webp", "promo": "Promos/Tamisha.webp"},
+    "Tina Burner": {"comedy": 8, "dance": 9, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 7, "rumix": 8, "ball": 8, "makeover": 5, "rusical": 6, "image": "Mugs/Tina.webp", "promo": "Promos/Tina.webp"},
+    "Utica Queen": {"comedy": 2, "dance": 9, "acting": 8, "fashion": 10, "runway": 10, "improv": 6, "snatch_game": 2, "rumix": 9, "ball": 15, "makeover": 15, "rusical": 9, "image": "Mugs/Utica.webp", "promo": "Promos/Utica.webp"}
 };
 
 let queen_stats_s10 = {
-    "Aquaria": {"comedy": 8, "dance": 8, "acting": 9, "fashion": 11, "runway": 15, "improv": 6, "snatch_game": 15, "lipsync": 10, "ball": 15, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/a/a9/AquariaS10CastMug.jpg/revision/latest?cb=20210831163055"},
-    "Asia O'Hara": {"comedy": 9, "dance": 8, "acting": 11, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/0/09/AsiaO%27HaraS10CastMug.jpg/revision/latest?cb=20210831163151"},
-    "Blair St. Clair": {"comedy": 4, "dance": 6, "acting": 8, "fashion": 9, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/e/e8/BlairStClairS10CastMug.jpg/revision/latest?cb=20210831163230"},
-    "Dusty Ray Bottoms": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/9/9c/DustyRayBottomsS10CastMug.jpg/revision/latest?cb=20210831163312"},
-    "Eureka": {"comedy": 11, "dance": 6, "acting": 8, "fashion": 8, "runway": 8, "improv": 11, "snatch_game": 10, "lipsync": 6, "ball": 8, "makeover": 9, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/9/9e/EurekaS10CastMug.jpg/revision/latest?cb=20210831163344"},
-    "Kalorie Karbdashian-Williams": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/1/15/KalorieKarbdashianWilliamsS10CastMug.jpg/revision/latest?cb=20210831163436"},
-    "Kameron Michaels": {"comedy": 4, "dance": 13, "acting": 6, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "lipsync": 8, "ball": 8, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/6/6a/KameronMichaelsS10CastMug.jpg/revision/latest?cb=20210831163523"},
-    "Mayhem Miller": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 15, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/9/96/MayhemMillerS10CastMug.jpg/revision/latest?cb=20210831163657"},
-    "Miz Cracker": {"comedy": 8, "dance": 6, "acting": 8, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "lipsync": 8, "ball": 8, "makeover": 12, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/d/dc/MizCrackerS10CastMug.jpg/revision/latest?cb=20210831163727"},
-    "Monique Heart": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/f/fe/MoniqueHeartS10CastMug.jpg/revision/latest?cb=20210831163838"},
-    "Monét X Change": {"comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 8, "lipsync": 8, "ball": 4, "makeover": 3, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/e/ea/Mon%C3%A9tXChangeS10CastMug.jpg/revision/latest?cb=20210831163803"},
-    "The Vixen": {"comedy": 6, "dance": 10, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/f/f0/TheVixenS10CastMug.jpg/revision/latest?cb=20210831164009"},
-    "Vanessa Vanjie Mateo": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/0/06/VanessaVanjieMateoS10CastMug.jpg/revision/latest?cb=20210831163920"},
-    "Yuhua Hamasaki": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/6/62/YuhuaHamasakiS10CastMug.jpg/revision/latest?cb=20210831164124"}
+    "Aquaria": {"comedy": 8, "dance": 8, "acting": 9, "fashion": 11, "runway": 15, "improv": 6, "snatch_game": 15, "lipsync": 10, "ball": 15, "makeover": 8, "image": "Mugs/Aquaria.webp", "promo": "Promos/Aquaria.webp"},
+    "Asia O'Hara": {"comedy": 9, "dance": 8, "acting": 11, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Asia.webp", "promo": "Promos/Asia.webp"},
+    "Blair St. Clair": {"comedy": 4, "dance": 6, "acting": 8, "fashion": 9, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/BlairS10.webp", "promo": "Promos/Blair.webp"},
+    "Dusty Ray Bottoms": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Dusty.webp", "promo": "Promos/Dusty.webp"},
+    "Eureka": {"comedy": 11, "dance": 6, "acting": 8, "fashion": 8, "runway": 8, "improv": 11, "snatch_game": 10, "lipsync": 6, "ball": 8, "makeover": 9, "image": "Mugs/EurekaS10.webp", "promo": "Promos/Eureka.webp"},
+    "Kalorie Karbdashian-Williams": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Kalorie.webp", "promo": "Promos/Kalorie.webp"},
+    "Kameron Michaels": {"comedy": 4, "dance": 13, "acting": 6, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Kameron.webp", "promo": "Promos/Kameron.webp"},
+    "Mayhem Miller": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 15, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/MayhemS10.webp", "promo": "Promos/Mayhem.webp"},
+    "Miz Cracker": {"comedy": 8, "dance": 6, "acting": 8, "fashion": 8, "runway": 8, "improv": 8, "snatch_game": 8, "lipsync": 8, "ball": 8, "makeover": 12, "image": "Mugs/MizS10.webp", "promo": "Promos/Miz.webp"},
+    "Monique Heart": {"comedy": 6, "dance": 6, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/MoS10.webp", "promo": "Promos/Mo.webp"},
+    "Monét X Change": {"comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 8, "lipsync": 8, "ball": 4, "makeover": 3, "image": "Mugs/MonetS10.webp", "promo": "Promos/Monet.webp"},
+    "The Vixen": {"comedy": 6, "dance": 10, "acting": 6, "fashion": 6, "runway": 6, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Vixen.webp", "promo": "Promos/Vixen.webp"},
+    "Vanessa Vanjie Mateo": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 3, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/VanessaS10.webp", "promo": "Promos/Vanessa.webp"},
+    "Yuhua Hamasaki": {"comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Yuhua.webp", "promo": "Promos/Yuhua.webp"}
+};
+let cast_s07 = ["Ginger Minj", "Jaidynn Diore Fierce", "Jasmine Masters", "Kandy Ho", "Katya", "Kennedy Davenport", "Max", "Miss Fame", "Mrs. Kasha Davis", "Pearl", "Sasha Belle", "Tempest DuJour", "Trixie Mattel", "Violet Chachki"];
+let queen_stats_s07 = {
+    "Ginger Minj": {"acting2": 12,"rusical": 15,"comedy": 11, "dance": 6, "acting": 11, "fashion": 8, "runway": 8, "improv": 9, "snatch_game": 15, "lipsync": 8, "ball": 8, "makeover": 2, "image": "Mugs/GingerS7.webp", "promo": "Promos/Ginger.webp"},
+    "Jaidynn Diore Fierce": {"acting2": 7,"rusical": 10,"comedy": 11, "dance": 8, "acting": 8, "fashion": 8, "runway": 10, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 4, "makeover": 4, "image": "Mugs/Jaidynn.webp", "promo": "Promos/Jaidynn.webp"},
+    "Jasmine Masters": {"acting2": 2,"rusical": 8,"comedy": 6, "dance": 5, "acting": 4, "fashion": 6, "runway": 5, "improv": 6, "snatch_game": 3, "lipsync": 6, "ball": 4, "makeover": 3, "image": "Mugs/JasmineMastersS7.webp", "promo": "Promos/Jasmine.webp"},
+    "Kandy Ho": {"acting2": 2,"rusical": 8,"comedy": 4, "dance": 7, "acting": 6, "fashion": 8, "runway": 5, "improv": 4, "snatch_game": 8, "lipsync": 4, "ball": 3, "makeover": 4, "image": "Mugs/Kandy.webp", "promo": "Promos/Kandy.webp"},
+    "Katya": {"acting2": 16,"rusical": 5,"comedy": 12, "dance": 15, "acting": 10, "fashion": 8, "runway": 8, "improv": 9, "snatch_game": 8, "lipsync": 11, "ball": 5, "makeover": 10, "image": "Mugs/KatyaS7.webp", "promo": "Promos/Katya.webp"},
+    "Kennedy Davenport": {"acting2": 7,"rusical": 11,"comedy": 15, "dance": 10, "acting": 5, "fashion": 8, "runway": 11, "improv": 11, "snatch_game": 15, "lipsync": 8, "ball": 5, "makeover": 8, "image": "Mugs/KennedyS7.webp", "promo": "Promos/Kennedy.webp"},
+    "Max": {"acting2": 9,"rusical": 10,"comedy": 9, "dance": 8, "acting": 14, "fashion": 8, "runway": 8, "improv": 15, "snatch_game": 5, "lipsync": 8, "ball": 10, "makeover": 10, "image": "Mugs/Max.webp", "promo": "Promos/Max.webp"},
+    "Miss Fame": {"acting2": 6.5,"rusical": 6,"comedy": 8, "dance": 8, "acting": 8, "fashion": 8, "runway": 12, "improv": 7, "snatch_game": 6, "lipsync": 8, "ball": 11, "makeover": 10, "image": "Mugs/Fame.webp", "promo": "Promos/Fame.webp"},
+    "Mrs. Kasha Davis": {"acting2": 6,"acting2": 7,"rusical": 11,"comedy": 10, "dance": 8, "acting": 10, "fashion": 8, "runway": 8, "improv": 4, "snatch_game": 7, "lipsync": 8, "ball": 3, "makeover": 3, "image": "Mugs/Kasha.webp", "promo": "Promos/Kasha.webp"},
+    "Pearl": {"acting2": 7,"rusical": 7,"comedy": 6, "dance": 9, "acting": 6, "fashion": 8, "runway": 8, "improv": 15, "snatch_game": 10, "lipsync": 8, "ball": 11, "makeover": 15, "image": "Mugs/Pearl.webp", "promo": "Promos/Pearl.webp"},
+    "Sasha Belle": {"acting2": 3,"rusical": 3,"comedy": 5, "dance": 3, "acting": 3, "fashion": 8, "runway": 3, "improv": 2, "snatch_game": 3, "lipsync": 8, "ball": 4, "makeover": 5, "image": "Mugs/Sasha.webp", "promo": "Promos/Sasha.webp"},
+    "Tempest DuJour": {"acting2": 5,"rusical": 2,"comedy": 5, "dance": 5, "acting": 4, "fashion": 8, "runway": 3, "improv": 3, "snatch_game": 2, "lipsync": 8, "ball": 6, "makeover": 5, "image": "Mugs/Tempest.webp", "promo": "Promos/Tempest.webp"}, 
+    "Trixie Mattel": {"acting2": 6,"rusical": 8,"comedy": 6, "dance": 3, "acting": 9, "fashion": 8, "runway": 8, "improv": 6.5, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/TrixieS7.webp", "promo": "Promos/Trixie.webp"},
+    "Violet Chachki": {"acting2": 8,"rusical": 10,"comedy": 8, "dance": 15, "acting": 9, "fashion": 8, "runway": 15, "improv": 6.5, "snatch_game": 9, "lipsync": 8, "ball": 15, "makeover": 11, "image": "Mugs/Violet.webp", "promo": "Promos/Violet.webp"},
+};
+let queen_stats_s03 = {
+    "Alexis Mateo": {"singing": 8,"comedy": 9, "dance": 8, "acting": 16, "fashion": 8, "video": 15, "improv": 11, "snatch_game": 11, "rumix": 8, "ball": 6, "makeover": 11, "rusical": 8, "ball2": 6, "image": "Mugs/AlexisS3.webp", "promo": "Promos/Alexis.webp"},
+    "Carmen Carrera": {"singing": 3,"comedy": 8, "dance": 8, "acting": 6, "fashion": 5, "video": 8, "improv": 6, "snatch_game": 6, "rumix": 8, "ball": 1, "makeover": 4, "rusical": 8, "ball2": 3, "image": "Mugs/Carmen.webp", "promo": "Promos/Carmen.webp"},
+    "Delta Work": {"singing": 4,"comedy": 2, "dance": 6, "acting": 3, "fashion": 8, "video": 8, "improv": 8, "snatch_game": 2, "rumix": 8, "ball": 2, "makeover": 4, "rusical": 8, "ball2": 3, "image": "Mugs/Delta.webp", "promo": "Promos/Delta.webp"},
+    "India Ferrah": {"singing": 6,"comedy": 6, "dance": 8, "acting": 6, "fashion": 6, "video": 2, "improv": 3, "snatch_game": 6, "rumix": 6, "ball": 2, "makeover": 4, "rusical": 6, "ball2": 3, "image": "Mugs/IndiaS3.webp", "promo": "Promos/India.webp"},
+    "Manila Luzon": {"singing": 11,"comedy": 5, "dance": 8, "acting": 10, "fashion": 12, "video": 8, "improv": 15, "snatch_game": 8, "rumix": 8, "ball": 12, "makeover": 16, "rusical": 8, "ball2": 15, "image": "Mugs/ManilaS3.webp", "promo": "Promos/Manila.webp"},
+    "Mariah": {"singing": 4,"comedy": 6, "dance": 8, "acting": 9, "fashion": 8, "video": 5, "improv": 5, "snatch_game": 2, "rumix": 8, "ball": 1, "makeover": 8, "rusical": 8, "ball2": 6, "image": "Mugs/MariahS3.webp", "promo": "Promos/Mariah.webp"},
+    "Mimi Imfurst": {"singing": 6,"comedy": 6, "dance": 6, "acting": 9, "fashion": 11, "video": 3, "improv": 3, "snatch_game": 6, "rumix": 6, "ball": 1, "makeover": 6, "rusical": 6, "ball2": 6, "image": "Mugs/Mimi.webp", "promo": "Promos/Mimi.webp"},
+    "Phoenix": {"singing": 4,"comedy": 3, "dance": 3, "acting": 2, "fashion": 6, "video": 6, "improv": 6, "snatch_game": 6, "rumix": 6, "ball": 2, "makeover": 6, "rusical": 6, "ball2": 6, "image": "Mugs/Phoenix.webp", "promo": "Promos/Phoenix.webp"},
+    "Raja": {"singing": 15,"comedy": 10, "dance": 8, "acting": 10, "fashion": 13, "video": 8, "improv": 8, "snatch_game": 11, "rumix": 8, "ball": 12, "makeover": 6, "rusical": 8, "ball2": 11, "image": "Mugs/RajaS3.webp", "promo": "Promos/Raja.webp"},
+    "Shangela": {"singing": 3,"comedy": 15, "dance": 8, "acting": 15, "fashion": 5, "video": 8, "improv": 11, "snatch_game": 9, "rumix": 8, "ball": 4, "makeover": 5, "rusical": 8, "ball2": 6, "image": "Mugs/ShangelaS3.webp", "promo": "Promos/Shangela.webp"},
+    "Stacy Layne Matthews": {"singing": 5,"comedy": 6, "dance": 6, "acting": 10, "video": 9, "fashion": 6, "improv": 10, "snatch_game": 15, "rumix": 6, "ball": 3, "makeover": 6, "rusical": 5, "ball2": 0, "image": "Mugs/Stacy.webp", "promo": "Promos/Stacy.webp"},
+    "Venus D-Lite": {"singing": 3,"comedy": 6, "dance": 6, "acting": 6, "fashion": 1, "video": 6, "improv": 6, "snatch_game": 7, "rumix": 6, "ball": 3, "makeover": 6, "rusical": 6, "ball2": 5, "image": "Mugs/Venus.webp", "promo": "Promos/Venus.webp"},
+    "Yara Sofia": {"singing": 11,"comedy": 10, "dance": 8, "acting": 8, "fashion": 10, "video": 11, "improv": 10, "snatch_game": 5, "rumix": 8, "ball": 15, "makeover": 10, "rusical": 8, "ball2": 6, "image": "Mugs/YaraS3.webp", "promo": "Promos/Yara.webp"}  
+};
+
+let challenges_s07 = {
+    "Born Naked": {type: "runway", doubleWin: false, description: "Queens must walk the runway in two looks: a spring look and a fall look."},
+    "Glamazonian Airways": {type: "rusical", doubleWin: false, description: "Queens must perform a lip-sync extravaganza set to airline safety instructions."},
+    "Shakesqueer": {type: "acting", doubleWin: false, description: "Queens must perform in two twisted Shakespeare classics."},
+    "Spoof (There It Is)": {type: "comedy", doubleWin: false, description: "Queens must create a parody music video."},
+    "The DESPY Awards": {type: "improv", doubleWin: true, description: "Queens must host their own DESPY (Drag Queen of the Year) Awards pre-show."},
+    "Ru-Hollywood Stories": {type: "acting2", doubleWin: false, description: "Queens must reenact a scene from RuPaul's life."},
+    "Snatch Game": {type: "snatch_game", doubleWin: true, description: "Queens must impersonate celebrities in a game show setting."},
+    "Conjoined Queens": {type: "makeover", doubleWin: false, description: "Queens must give eliminated queens a conjoined twin makeover."},
+    "Divine Inspiration": {type: "rusical", doubleWin: false, description: "Queens must perform a musical tribute to John Waters."},
+    "Prancing Queens": {type: "dance", doubleWin: true, description: "Queens must perform a dance inspired by various dance styles."},
+    "Hello, Kitty Girls!": {type: "ball", doubleWin: false, description: "Queens must create a Hello Kitty-inspired couture look."},
+    "And The Rest Is Drag": {type: "acting", doubleWin: false, description: "Queens must act in the music video for RuPaul's song 'Born Naked'."},
 };
 
 let challenges_s10 = {
-    "10s Across The Board": {type: "fashion", doubleWin: false},
-    "PharmaRusical": {type: "dance", doubleWin: false},
-    "Tap That App": {type: "acting", doubleWin: false},
-    "The Last Ball on Earth": {type: "ball", doubleWin: false},
-    "The Bossy Rossy Show": {type: "improv", doubleWin: false},
-    "Drag Con Panel Extravaganza": {type: "comedy", doubleWin: false},
-    "Snatch Game": {type: "snatch_game", doubleWin: false},
-    "Cher: The Unauthorized Rusical": {type: "dance", doubleWin: false},
-    "Breastworld": {type: "acting", doubleWin: false},
-    "Social Media Kings Into Queens": {type: "makeover", doubleWin: false},
-    "Evil Twins": {type: "runway", doubleWin: false},
+    "10s Across The Board": {type: "fashion", doubleWin: false, description: "Queens must create a look that scores '10s across the board'."},
+    "PharmaRusical": {type: "dance", doubleWin: false, description: "Queens must perform a lip-sync extravaganza set to a pharmaceutical commercial."},
+    "Tap That App": {type: "acting", doubleWin: false, description: "Queens must act in a skit promoting new dating apps."},
+    "The Last Ball on Earth": {type: "ball", doubleWin: false, description: "Queens must create three distinct looks for the last ball on Earth."},
+    "The Bossy Rossy Show": {type: "improv", doubleWin: false, description: "Queens must improvise in outrageous talk show segments."},
+    "Drag Con Panel Extravaganza": {type: "comedy", doubleWin: false, description: "Queens must host a panel on hair, body, and makeup at DragCon."},
+    "Snatch Game": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "Cher: The Unauthorized Rusical": {type: "dance", doubleWin: false, description: "Queens must perform a musical about Cher's life."},
+    "Breastworld": {type: "acting", doubleWin: false, description: "Queens must act in a parody of the TV show 'Westworld'."},
+    "Social Media Kings Into Queens": {type: "makeover", doubleWin: false, description: "Queens must give social media influencers a drag makeover."},
+    "Evil Twins": {type: "runway", doubleWin: false, description: "Queens must present two contrasting looks: their best self and their evil twin."},
 };
 
-let challenges_uk2 = {
-    "Rats: The Rusical": "dance",
-    "Morning Glory": "acting",
-    "Who Wore It Best": "fashion",
-    "Lockdown Supersheroes": "makeover",
-    "The Snatch Game": "snatch_game",
-    "The Rusical": "dance",
-    "The Big Drag Do": "improv",
-    "BeastEnders": "acting",
-    "The Family That Slays Together": "makeover",
-    "The Grand Finale": "fashion",
+let challenges_s03 = {
+    "The Queen Who Mopped Xmas": {type: "fashion", doubleWin: false, description: "Queens must perform in a holiday-themed acting challenge."},
+    "Queens in Space": {type: "acting", doubleWin: true, description: "Queens must act in a sci-fi inspired challenge."},
+    "Totally Leotarded": {type: "video", doubleWin: false, description: "Queens must create a leotard-inspired fashion look."},
+    "QNN News": {type: "improv", doubleWin: false, description: "Queens must improvise in a news anchor challenge."},
+    "Snatch Game": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "Face, Face, Face of Cakes": {type: "fashion", doubleWin: false, description: "Queens must create a cake-inspired fashion look."},
+    "Ru Ha Ha": {type: "comedy", doubleWin: false, description: "Queens must perform in a stand-up comedy challenge."},
+    "Life, Liberty & the Pursuit of Style": {type: "acting", doubleWin: false, description: "Queens must create a patriotic-inspired fashion look."},
+    "RuPaul-a-Palooza": {type: "singing", doubleWin: false, description: "Queens must perform in a music performance challenge."},
+    "The Hair Ball": {type: "ball", doubleWin: false, description: "Queens must create three distinct hair-inspired fashion looks."},
+    "Jocks in Frocks": {type: "makeover", doubleWin: false, description: "Queens must create a sports-inspired fashion look."},
+    "The Money Ball": {type: "ball2", doubleWin: false, description: "Queens must create three distinct looks inspired by money."},
 };
 
+// Define the challenges of RuPaul's Drag Race Season 13
 let challenges_s13 = {
-    "Condragulations": {type: "rumix", doubleWin: false},
-    "Phenomenon": {type: "rumix", doubleWin: false},
-    "RuPaulmark Channel": {type: "acting", doubleWin: false},
-    "The Bag Ball": {type: "ball", doubleWin: false},   
-    "Disco-Mentary": {type: "dance", doubleWin: false},
-    "Bossy Rossy Ruboot": {type: "improv", doubleWin: false},
-    "Social Media: The Unverified Rusical": {type: "rusical", doubleWin: false},
-    "Snatch Game": {type: "snatch_game", doubleWin: false},
-    "Freaky Friday Queens": {type: "makeover", doubleWin: true},
-    "Pop! Goes The Queens": {type: "acting", doubleWin: true},
-    "Nice Girls Roast": {type: "comedy", doubleWin: false},
-    "Henny, I Shrunk The Drag Queens!": {type: "acting", doubleWin: false},
+    "Condragulations": {type: "rumix", doubleWin: false, description: "Queens must create and perform in a remix of a RuPaul song."},
+    "Phenomenon": {type: "rumix", doubleWin: false, description: "Queens must create and perform in a remix of a RuPaul song."},
+    "RuPaulmark Channel": {type: "acting", doubleWin: false, description: "Queens must act in a parody of Hallmark Channel movies."},
+    "The Bag Ball": {type: "ball", doubleWin: false, description: "Queens must create three distinct looks using bags as the main material."},
+    "Disco-Mentary": {type: "dance", doubleWin: false, description: "Queens must perform a dance routine inspired by disco."},
+    "Bossy Rossy Ruboot": {type: "improv", doubleWin: false, description: "Queens must improvise in a series of comedic sketches."},
+    "Social Media: The Unverified Rusical": {type: "rusical", doubleWin: false, description: "Queens must perform in a musical about the influence of social media."},
+    "Snatch Game": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "Freaky Friday Queens": {type: "makeover", doubleWin: true, description: "Queens must give each other a drag makeover, swapping their signature styles."},
+    "Pop! Goes The Queens": {type: "acting", doubleWin: true, description: "Queens must act in a parody of pop music videos."},
+    "Nice Girls Roast": {type: "comedy", doubleWin: false, description: "Queens must roast each other in a comedy challenge."},
+    "Henny, I Shrunk The Drag Queens!": {type: "acting", doubleWin: false, description: "Queens must act in a parody of the movie 'Honey, I Shrunk the Kids'."},
 };
 
 // Define the challenges of RuPaul's Drag Race Season 11
 let challenges_s11 = {
-    "Whatcha Unpackin?": {type: "fashion", doubleWin: false},
-    "Good God, Girl Get Out": {type: "acting", doubleWin: true},
-    "Diva Worship": {type: "improv", doubleWin: false},
-    "Trump: The Rusical": {type: "dance", doubleWin: false},
-    "Monster Ball": {type: "ball", doubleWin: false},
-    "The Draglympics": {type: "dance", doubleWin: false},
-    "From Farm To Runway": {type: "fashion", doubleWin: false},
-    "Snatch Game At Sea": {type: "snatch_game", doubleWin: false},
-    "L.A.D.P.!": {type: "improv", doubleWin: false},
-    "Dragracadabra": {type: "improv", doubleWin: false},
-    "Bring Back My Queens!": {type: "makeover", doubleWin: false},
-    "Queens Everywhere": {type: "dance", doubleWin: false},
+    "Whatcha Unpackin?": {type: "fashion", doubleWin: false, description: "Queens must create a look using materials from previous queens' suitcases."},
+    "Good God, Girl Get Out": {type: "acting", doubleWin: true, description: "Queens must act in a parody of blockbuster movies."},
+    "Diva Worship": {type: "improv", doubleWin: false, description: "Queens must host a 'She-vangelical' talk show and convert their audience to worship a pop diva."},
+    "Trump: The Rusical": {type: "rusical", doubleWin: false, description: "Queens must perform in a musical about the life of Donald Trump."},
+    "Monster Ball": {type: "ball", doubleWin: false, description: "Queens must create three distinct monster-themed looks."},
+    "The Draglympics": {type: "dance", doubleWin: false, description: "Queens must compete in a series of athletic dance challenges."},
+    "From Farm To Runway": {type: "fashion", doubleWin: false, description: "Queens must create a high-fashion look using organic materials."},
+    "Snatch Game At Sea": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "L.A.D.P.!": {type: "improv", doubleWin: false, description: "Queens must improvise in a series of comedic sketches based on 'Cops'."},
+    "Dragracadabra": {type: "improv", doubleWin: false, description: "Queens must perform in a magic show."},
+    "Bring Back My Queens!": {type: "makeover", doubleWin: false, description: "Queens must give eliminated queens a drag makeover."},
+    "Queens Everywhere": {type: "dance", doubleWin: false, description: "Queens must perform a choreographed routine to RuPaul's song 'Queens Everywhere'."},
 };
 
 // Define the stats for each queen based on their performance in the original season
 let queen_stats_s12 = {
-    "Aiden Zhane": {"rusical": 5, "comedy": 2, "dance": 3, "acting": 2, "fashion": 3, "runway": 3, "improv": 2, "snatch_game": 2, "lipsync": 3, "ball": 3, "makeover":4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/2/26/AidenZhaneS12CastMug.png/revision/latest?cb=20210901203704"},
-    "Brita": {"rusical": 6, "comedy": 3, "dance": 7, "acting": 6, "fashion": 3, "runway": 4, "improv": 4, "snatch_game": 3, "lipsync": 4, "ball": 4, "makeover": 4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3e/BritaS12CastMug.png/revision/latest?cb=20210901203733"},
-    "Crystal Methyd": {"rusical": 10, "comedy": 7, "dance": 4, "acting": 6, "fashion": 5, "runway": 8, "improv": 6, "snatch_game": 7, "lipsync": 4, "ball": 4, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/d/d8/CrystalMethydS12CastMug.png/revision/latest?cb=20210901203840"},
-    "Dahlia Sin": {"rusical": 4, "comedy": 2, "dance": 3, "acting": 2, "fashion": 4, "runway": 4, "improv": 3, "snatch_game": 2, "lipsync": 3, "ball": 3, "makeover": 3, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/6/6a/DahliaSinS12CastMug.png/revision/latest?cb=20210901203910"},
-    "Gigi Goode": {"rusical": 15, "comedy": 4, "dance": 10, "acting": 9, "fashion": 7, "runway": 9, "improv": 6, "snatch_game": 10, "lipsync": 6, "ball": 10, "makeover": 8, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/b/b8/GigiGoodeS12CastMug.png/revision/latest?cb=20210901203939"},
-    "Heidi N Closet": {"rusical": 6,"comedy": 6, "dance": 5, "acting": 8, "fashion": 3, "runway": 3, "improv": 11, "snatch_game": 4, "lipsync": 10, "ball": 3, "makeover": 3, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/5/56/HeidiNClosetS12CastMug.png/revision/latest?cb=20210901204007"},
-    "Jackie Cox": {"rusical": 8,"comedy": 10, "dance": 3, "acting": 10, "fashion": 3, "runway": 3, "improv": 8, "snatch_game": 10, "lipsync": 3, "ball": 3, "makeover": 3, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/e/e7/JackieCoxS12CastMug.png/revision/latest?cb=20210901204041"},
-    "Jaida Essence Hall": {"rusical": 9,"comedy": 6, "dance": 12, "acting": 8, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 8, "makeover": 11, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/8/8e/JaidaEssenceHallS12CastMug.png/revision/latest?cb=20210901204134"},
-    "Jan": {"rusical": 11,"comedy": 4, "dance": 10, "acting": 4, "fashion": 7, "runway": 4, "improv": 4, "snatch_game": 4, "lipsync": 4, "ball": 4, "makeover": 4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/a/a9/JanS12CastMug.png/revision/latest?cb=20210901204227"},
-    "Nicky Doll": {"rusical": 5,"comedy": 2, "dance": 3, "acting": 2, "fashion": 4, "runway": 7, "improv": 2, "snatch_game": 2, "lipsync": 3, "ball": 7, "makeover": 7, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/5/5f/NickyDollS12CastMug.png/revision/latest?cb=20210901204259"},
-    "Rock M. Sakura": {"rusical": 1,"comedy": 4, "dance": 4, "acting": 3, "fashion": 3, "runway": 3, "improv": 4, "snatch_game": 4, "lipsync": 3, "ball": 3, "makeover": 3, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/d/dd/RockMSakuraS12CastMug.png/revision/latest?cb=20210901204420"},
-    "Sherry Pie": {"rusical": 8,"comedy": 8, "dance": 9, "acting": 13, "fashion": 4, "runway": 4, "improv": 10, "snatch_game": 8, "lipsync": 3, "ball": 4, "makeover": 4, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/e/ea/SherryPieS12CastMug.png/revision/latest?cb=20210901204619"},
-    "Widow Von'Du": {"rusical": 10,"comedy": 4, "dance": 12, "acting": 8, "fashion": 6, "runway": 6, "improv": 7, "snatch_game": 6, "lipsync": 12, "ball": 6, "makeover": 3, "image": "https://static.wikia.nocookie.net/logosrupaulsdragrace/images/3/3d/WidowVon%27DuS12CastMug.png/revision/latest?cb=20210901204655"}
+    "Aiden Zhane": {"standup": 4,"political": 4,"branding": 4,"rusical": 5, "comedy": 2, "dance": 3, "acting": 2, "fashion": 3, "runway": 3, "improv": 5, "snatch_game": 2, "lipsync": 3, "ball": 3, "makeover":4, "image": "Mugs/Aiden.webp", "promo": "Promos/Aiden.webp"},
+    "Brita": {"standup": 4,"political": 4,"branding": 6,"rusical": 6, "comedy": 3, "dance": 7, "acting": 6, "fashion": 3, "runway": 4, "improv": 4, "snatch_game": 3, "lipsync": 4, "ball": 4, "makeover": 4, "image": "Mugs/Brita.webp", "promo": "Promos/Brita.webp"},
+    "Crystal Methyd": {"standup": 15,"political": 10,"branding": 10,"rusical": 10, "comedy": 7, "dance": 4, "acting": 6, "fashion": 5, "runway": 8, "improv": 6, "snatch_game": 7, "lipsync": 4, "ball": 4, "makeover": 8, "image": "Mugs/Crystal.webp", "promo": "Promos/Crystal.webp"},
+    "Dahlia Sin": {"standup": 4,"political": 4,"branding": 4,"rusical": 4, "comedy": 2, "dance": 3, "acting": 2, "fashion": 4, "runway": 4, "improv": 1, "snatch_game": 2, "lipsync": 3, "ball": 3, "makeover": 3, "image": "Mugs/Dahlia.webp", "promo": "Promos/Dahlia.webp"},
+    "Gigi Goode": {"standup": 8,"political": 8,"branding": 8,"rusical": 15, "comedy": 8, "dance": 10, "acting": 9, "fashion": 7, "runway": 9, "improv": 6, "snatch_game": 10, "lipsync": 6, "ball": 10, "makeover": 8, "image": "Mugs/Gigi.webp", "promo": "Promos/Gigi.webp"},
+    "Heidi N Closet": {"standup": 6,"political": 10,"branding": 15,"rusical": 6,"comedy": 6, "dance": 5, "acting": 8, "fashion": 3, "runway": 3, "improv": 11, "snatch_game": 4, "lipsync": 10, "ball": 3, "makeover": 3, "image": "Mugs/Heidi.webp", "promo": "Promos/Heidi.webp"},
+    "Jackie Cox": {"standup": 10,"political": 6,"branding": 11,"rusical": 6,"comedy": 10, "dance": 7, "acting": 10, "fashion": 7, "runway": 8, "improv": 8, "snatch_game": 10, "lipsync": 7, "ball": 7, "makeover": 3, "image": "Mugs/Jackie.webp", "promo": "Promos/Jackie.webp"},
+    "Jaida Essence Hall": {"standup": 6,"political": 15,"branding": 7,"rusical": 9,"comedy": 6, "dance": 12, "acting": 8, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 6, "ball": 8, "makeover": 11, "image": "Mugs/JaidaS12.webp", "promo": "Promos/Jaida.webp"},
+    "Jan": {"standup": 4,"political": 6,"branding": 5,"rusical": 11,"comedy": 4, "dance": 10, "acting": 4, "fashion": 7, "runway": 4, "improv": 4, "snatch_game": 4, "lipsync": 4, "ball": 4, "makeover": 4, "image": "Mugs/JanS12.webp", "promo": "Promos/Jan.webp"},
+    "Nicky Doll": {"standup": 4,"political": 4,"branding": 4,"rusical": 5,"comedy": 2, "dance": 3, "acting": 2, "fashion": 4, "runway": 7, "improv": 2, "snatch_game": 2, "lipsync": 3, "ball": 7, "makeover": 7, "image": "Mugs/Nicky.webp", "promo": "Promos/Nicky.webp"},
+    "Rock M. Sakura": {"standup": 4,"political": 4,"branding": 4,"rusical": 1,"comedy": 4, "dance": 4, "acting": 3, "fashion": 3, "runway": 3, "improv": 4, "snatch_game": 4, "lipsync": 3, "ball": 3, "makeover": 3, "image": "Mugs/Rock.webp", "promo": "Promos/Rock.webp"},
+    "Sherry Pie": {"standup": 9,"political": 8,"branding": 8,"rusical": 8,"comedy": 8, "dance": 9, "acting": 13, "fashion": 4, "runway": 4, "improv": 14, "snatch_game": 8, "lipsync": 3, "ball": 4, "makeover": 4, "image": "Mugs/Sherry.webp", "promo": "Promos/Sherry.webp"},
+    "Widow Von'Du": {"standup": 7,"political": 3,"branding": 5,"rusical": 10,"comedy": 4, "dance": 12, "acting": 8, "fashion": 6, "runway": 6, "improv": 7, "snatch_game": 6, "lipsync": 12, "ball": 6, "makeover": 3, "image": "Mugs/Widow.webp", "promo": "Promos/Widow.webp"}
 };
 
 // Define the challenges of RuPaul's Drag Race Season 12
 let challenges_s09 = {
-    "Oh. My. Gaga!": {type: "runway", doubleWin: false},
-    "She Done Already Done Brought It On": {type: "dance", doubleWin: false},
-    "Draggily Ever After": {type: "fashion", doubleWin: false},
-    "Good Morning Bitches": {type: "improv", doubleWin: true},
-    "Reality Stars: The Musical": {type: "rusical", doubleWin: false},
-    "Snatch Game": {type: "snatch_game", doubleWin: false},
-    "9021-HO": {type: "acting", doubleWin: false},
-    "RuPaul Roast": {type: "comedy", doubleWin: false},
-    "Your Pilot's On Fire": {type: "improv", doubleWin: true},
-    "Makeovers: Crew Better Work": {type: "makeover", doubleWin: false},
-    "The Gayest Ball Ever": {type: "ball", doubleWin: false},
+    "Oh. My. Gaga!": {type: "runway", doubleWin: false, description: "Queens must present two runway looks inspired by Lady Gaga."},
+    "She Done Already Done Brought It On": {type: "dance", doubleWin: false, description: "Queens must perform a cheerleading routine."},
+    "Draggily Ever After": {type: "fashion", doubleWin: false, description: "Queens must create a fairytale princess look and her sassy sidekick."},
+    "Good Morning Bitches": {type: "improv", doubleWin: true, description: "Queens must host a morning talk show."},
+    "Reality Stars: The Musical": {type: "rusical", doubleWin: false, description: "Queens must perform in a musical about the Kardashians."},
+    "Snatch Game": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "9021-HO": {type: "acting", doubleWin: false, description: "Queens must act in a parody of 'Beverly Hills, 90210'."},
+    "RuPaul Roast": {type: "comedy", doubleWin: false, description: "Queens must perform a roast of Michelle Visage."},
+    "Your Pilot's On Fire": {type: "improv", doubleWin: true, description: "Queens must create, write, and star in their own TV pilots."},
+    "Makeovers: Crew Better Work": {type: "makeover", doubleWin: false, description: "Queens must give members of the 'Drag Race' crew a drag makeover."},
+    "The Gayest Ball Ever": {type: "ball", doubleWin: false, description: "Queens must present three looks for the Gayest Ball Ever."},
 };
 
 
 let challenges_s12 = {
-    "I'm That Bitch": {type: "dance", doubleWin: false},
-    "You Don't Know Me": {type: "dance", doubleWin: false},
-    "World's Worst": {type: "improv", doubleWin: false},
-    "The Ball Ball": {type: "ball", doubleWin: false},
-    "Gay's Anatomy": {type: "acting", doubleWin: false},
-    "Snatch Game": {type: "snatch_game", doubleWin: false},
-    "Madonna: The Unauthorized Rusical": {type: "rusical", doubleWin: false},
-    "Droop": {type: "improv", doubleWin: false},
-    "Choices 2020": {type: "acting", doubleWin: false},
-    "Superfan Makeover": {type: "makeover", doubleWin: false},
-    "One-Queen Show": {type: "comedy", doubleWin: false},
-    "Viva Drag Vegas": {type: "rusical", doubleWin: false},
+    "I'm That Bitch": {type: "dance", doubleWin: false, description: "Queens must perform a choreographed lip-sync to the song 'I'm That Bitch'."},
+    "You Don't Know Me": {type: "dance", doubleWin: false, description: "Queens must perform a Fosse-inspired jazz number."},
+    "World's Worst": {type: "improv", doubleWin: false, description: "Queens must improvise in a talent show for the title of 'World's Worst'."},
+    "The Ball Ball": {type: "ball", doubleWin: false, description: "Queens must create three distinct ball-themed looks."},
+    "Gay's Anatomy": {type: "acting", doubleWin: false, description: "Queens must act in a parody of the TV show 'Grey's Anatomy'."},
+    "Snatch Game": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "Madonna: The Unauthorized Rusical": {type: "rusical", doubleWin: false, description: "Queens must perform in a musical about Madonna's life."},
+    "Droop": {type: "branding", doubleWin: false, description: "Queens must create and market their own lifestyle brand."},
+    "Choices 2020": {type: "political", doubleWin: false, description: "Queens must act in a political campaign ad."},
+    "Superfan Makeover": {type: "makeover", doubleWin: false, description: "Queens must give superfans a drag makeover."},
+    "One-Queen Show": {type: "standup", doubleWin: false, description: "Queens must write and perform their own one-queen show."},
+    "Viva Drag Vegas": {type: "rusical", doubleWin: false, description: "Queens must perform in a musical set in Las Vegas."},
 };
 
+let cast_as2 = ["Adore Delano", "Alaska", "Alyssa Edwards", "Coco Montrese", "Detox", "Ginger Minj", "Katya", "Phi Phi O'Hara", "Roxxxy Andrews", "Tatianna"];
+
+let challenges_as2 = {
+    "All Star Talent Show Extravaganza": {type: "talent_show", doubleWin: false, description: "Queens must showcase their talents in a variety show."},
+    "All Stars Snatch Game": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "HERstory of the World": {type: "rusical", doubleWin: false, description: "Queens must act in a parody of historical events."},
+    "Drag Movie Shequels": {type: "acting", doubleWin: false, description: "Queens must act in a parody of hit movies."},
+    "Revenge of the Queens": {type: "comedy", doubleWin: false, description: "Queens must perform in a comedy standup of the other queens."},
+    "Drag Fish, Tank": {type: "branding", doubleWin: false, description: "Queens must create and market their own product."},
+    "Family That Drags Together": {type: "makeover", doubleWin: false, description: "Queens must give their family members a drag makeover."},
+};
+
+let queen_stats_as2 = {
+    "Adore Delano": {"comedy": 8,"rusical": 11,"talent_show": 6,"snatch_game": 8,"acting": 8,"lipsync": 8,"branding": 10,"makeover": 8,"music": 8,"image": "Mugs/AdoreAS2.webp", "promo": "Promos/Adore.webp"},
+    "Alaska": {"comedy": 15,"rusical": 8,"talent_show": 10,"snatch_game": 14,"acting": 15,"lipsync": 10,"branding": 15,"makeover": 8,"music": 10,"image": "Mugs/AlaskaAS2.webp", "promo": "Promos/Alaska.webp"},
+    "Alyssa Edwards": {"comedy": 15,"rusical": 15,"talent_show": 8,"snatch_game": 10,"acting": 8,"lipsync": 8,"branding": 9,"makeover": 6,"music": 6,"image": "Mugs/AlyssaAS2.webp", "promo": "Promos/Alyssa.webp"},
+    "Coco Montrese": {"comedy": 6,"rusical": 5,"talent_show": 3,"snatch_game": 6,"acting": 4,"lipsync": 6,"branding": 4,"makeover": 4,"music": 4,"image": "Mugs/CocoAS2.webp", "promo": "Promos/Coco.webp"},
+    "Detox": {"comedy": 12,"rusical": 14,"talent_show": 9,"snatch_game": 7,"acting": 6,"lipsync": 8,"branding": 8,"makeover": 15,"music": 6,"image": "Mugs/DetoxAS2.webp", "promo": "Promos/Detox.webp"},
+    "Ginger Minj": {"comedy": 9,"rusical": 6,"talent_show": 11,"snatch_game": 10,"acting": 11,"lipsync": 8,"branding": 10,"makeover": 8,"music": 6,"image": "Mugs/GingerAS2.webp", "promo": "Promos/Ginger.webp"},
+    "Katya": {"comedy": 9,"rusical": 8,"talent_show": 8,"snatch_game": 15,"acting": 8,"lipsync": 8,"branding": 14,"makeover": 13,"music": 14,"image": "Mugs/KatyaAS2.webp", "promo": "Promos/Katya.webp"},
+    "Phi Phi O'Hara": {"comedy": 3,"rusical": 9,"talent_show": 4,"snatch_game": 8,"acting": 15,"lipsync": 6,"branding": 4,"makeover": 9,"music": 4,"image": "Mugs/JaremyAS2.webp", "promo": "Promos/PhiPhi.webp"},
+    "Roxxxy Andrews": {"comedy": 5,"rusical": 9,"talent_show": 14,"snatch_game": 6,"acting": 4,"lipsync": 6,"branding": 4,"makeover": 9,"music": 4,"image": "Mugs/RoxxxyAS2.webp", "promo": "Promos/Roxxxy.webp"},
+    "Tatianna": {"comedy": 12,"rusical": 9,"talent_show": 15,"snatch_game": 5,"acting": 5,"lipsync": 8,"branding": 6,"makeover": 8,"music": 6,"image": "Mugs/TatiannaAS2.webp", "promo": "Promos/Tatianna.webp"},
+};
+
+let cast_as4 = ["Farrah Moan", "Gia Gunn", "Jasmine Masters", "Latrice Royale", "Manila Luzon", "Monét X Change", "Monique Heart", "Naomi Smalls", "Trinity The Tuck", "Valentina"];
+
+let challenges_as4 = {
+    "All Star Super Queen Variety Show": {type: "talent_show", doubleWin: false, description: "Queens must showcase their talents in a variety show."},
+    "Super Girl Groups, Henny": {type: "gg", doubleWin: false, description: "Queens must perform and record a girl group song."},
+    "Snatch Game of Love": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a dating game show setting."},
+    "Jershey Justice": {type: "improv", doubleWin: false, description: "Queens must act in a parody of courtroom dramas."},
+    "Roast in Peace": {type: "comedy", doubleWin: false, description: "Queens must perform a roast of Lady Bunny."},
+    "LaLaPaRUza": {type: "lipsync", doubleWin: false, description: "Queens must perform a lip-sync battle against a previously eliminated queen."},
+    "Queens of Clubs": {type: "branding", doubleWin: false, description: "Queens must create and market their own club night."},
+    "RuPauls Best Judy's Race": {type: "makeover", doubleWin: false, description: "Queens must give their best Judy a drag makeover."},
+    "Sex and the Kitty, Girl 3": {type: "acting", doubleWin: false, description: "Queens must star in a mockumentary of Sex and the City called Sex and the Kitty, Girl 3"},
+};
+
+let queen_stats_as4 = {
+    "Farrah Moan": {"improv": 4,"comedy": 4,"gg": 5,"talent_show": 6,"snatch_game": 4,"acting": 5,"lipsync": 8,"branding": 5,"makeover": 8,"music": 4,"image": "Mugs/FarrahAS4.webp", "promo": "Promos/FarrahAS4.webp"},
+    "Gia Gunn": {"improv": 6,"comedy": 5,"gg": 8,"talent_show": 9,"snatch_game": 5,"acting": 4,"lipsync": 8,"branding": 6,"makeover": 6,"music": 4,"image": "Mugs/GiaAS4.webp", "promo": "Promos/Gia.webp"},
+    "Jasmine Masters": {"improv": 4,"comedy": 5,"gg": 4,"talent_show": 3,"snatch_game": 4,"acting": 4,"lipsync": 4,"branding": 6,"makeover": 6,"music": 4,"image": "Mugs/JasmineAS4.webp",  "promo": "Promos/JasmineAS4.webp"},    
+    "Latrice Royale": {"improv": 6,"comedy": 8,"gg": 10,"talent_show": 10,"snatch_game": 6,"acting": 6,"lipsync": 11,"branding": 15,"makeover": 5,"music": 4,"image": "Mugs/LatriceAS4.webp",  "promo": "Promos/Latrice.webp"},
+    "Manila Luzon": {"improv": 15,"comedy": 15,"gg": 7,"talent_show": 8,"snatch_game": 15,"acting": 11,"lipsync": 10,"branding": 10,"makeover": 3,"music": 4,"image": "Mugs/ManilaAS4.webp", "promo": "Promos/Manila.webp"},
+    "Monét X Change": {"improv": 6,"comedy": 15,"gg": 15,"talent_show": 6.5,"snatch_game": 9,"acting": 8,"lipsync": 11,"branding": 8,"makeover": 14,"music": 4,"image": "Mugs/MonetAS4.webp","promo": "Promos/MonetAS4.webp"},
+    "Monique Heart": {"improv": 15,"comedy": 11,"gg": 8,"talent_show": 15,"snatch_game": 10,"acting": 15,"lipsync": 14,"branding": 8,"makeover": 11,"music": 4,"image": "Mugs/MoAS4.webp","promo": "Promos/MoAS4.webp"},
+"Naomi Smalls": {"improv": 9,"comedy": 7,"gg": 11,"talent_show": 12,"snatch_game": 12,"acting": 7,"lipsync": 11,"branding": 5,"makeover": 15,"music": 4,"image": "Mugs/NaomiAS4.webp", "promo": "Promos/Naomi.webp"},
+"Trinity The Tuck": {"improv": 8,"comedy": 9,"gg": 9,"talent_show": 15,"snatch_game": 15,"acting": 15,"lipsync": 11,"branding": 15,"makeover": 11,"music": 4,"image": "Mugs/TTTAS4.webp","promo": "Promos/TTT.webp"},
+"Valentina": {"improv": 11,"comedy": 7,"gg": 15,"talent_show": 8,"snatch_game": 8,"acting": 7,"lipsync": 10,"branding": 5,"makeover": 9,"music": 4,"image": "Mugs/ValentinaAS4.webp", "promo": "Promos/ValentinaAS4.webp"},
+};
 // Define the cast and challenges for each season
 let seasons = {
-    '11': [cast_s11, challenges_s11, queen_stats_s11],
-    '12': [cast_s12, challenges_s12, queen_stats_s12],
-    '10': [cast_s10, challenges_s10, queen_stats_s10],
-    '13': [cast_s13, challenges_s13, queen_stats_s13],
-    '9': [cast_s09, challenges_s09, queen_stats_s09],
+    '11': [cast_s11, challenges_s11, queen_stats_s11, false],
+    '12': [cast_s12, challenges_s12, queen_stats_s12, false],
+    '10': [cast_s10, challenges_s10, queen_stats_s10, false],
+    '13': [cast_s13, challenges_s13, queen_stats_s13, false],
+    '9': [cast_s09, challenges_s09, queen_stats_s09, false],
+    '7': [cast_s07, challenges_s07, queen_stats_s07, false],
+    '3': [cast_s03, challenges_s03, queen_stats_s03, false],
+    'All Stars 2': [cast_as2, challenges_as2, queen_stats_as2, true],
+    'All Stars 4': [cast_as4, challenges_as4, queen_stats_as4, true],
+    // ... other seasons ...
 };
 
 // Function to shuffle an array
@@ -377,18 +588,37 @@ function shuffle(array) {
     return array;
 }
 
-async function simulateSeason() {
+// Iterate over the seasons
+for (let season in seasons) {
+    // Log the season name and All Stars status
+    console.log('Season:', season);
+    console.log('Is All Stars:', seasons[season][3]);
+    // Create a button for the season
+    let button = document.createElement('button');
+    button.innerText = season;
+    button.addEventListener('click', function() {
+        // Call the simulateSeason function
+        simulateSeason(season);
+        // Remove all the buttons
+        for (let season in seasons) {
+            let button = document.getElementById(season);
+            document.body.removeChild(button);
+        }
+    });
+    button.id = season;  // Set the id of the button to the season
+    // Append the button to the body (or wherever you want the buttons to appear)
+    document.body.appendChild(button);
+}
 
-    // Ask the user to choose a season
-    let season = prompt("Which season would you like to simulate? ");
-    while (!(season in seasons)) {
-        season = prompt("Invalid input. Please choose a valid season: ");
-    }
-
-    // Get the cast, challenges, and queen stats for the chosen season
-    let cast = seasons[season][0];
-    let challenges = seasons[season][1];
-    let queen_stats = seasons[season][2];
+async function simulateSeason(season) {
+        // Log the season name and All Stars status
+        console.log('Simulating season:', season);
+    console.log('Is All Stars:', seasons[season][3]);
+    let secondWinners = [];
+    let secondWinner = null;
+let cast = seasons[season][0];
+let challenges = seasons[season][1];
+let queen_stats = seasons[season][2];
 
     // Check if the season is 12 or 13 for the double premiere feature
     let double_premiere = (season == '12' || season == '13');
@@ -408,6 +638,7 @@ async function simulateSeason() {
 
 // Create a separate div for the track record
 let trackRecordDiv = document.createElement('div');
+trackRecordDiv.id = "track-record"; // Assign an ID
 document.body.appendChild(trackRecordDiv);
 
 // Create an array to store the placements for each episode
@@ -423,27 +654,169 @@ let eliminationOrder = [];
 for (let i = 0; i < Object.keys(challenges).length; i++) {
     let challenge = Object.keys(challenges)[i];
 
-    // Display the episode number and challenge
-    output.innerHTML += `<div class="episode"><h2>Welcome to Episode ${i+1}: ${challenge}!</h2><p>Our queens for this episode are:</p></div>`;
+// Display the episode number, challenge, and challenge description
+output.innerHTML += `<div class="episode"><h2>Welcome to Episode ${i+1}: ${challenge}</h2><p>${challenges[challenge].description}</p></div>`;
+// Choose the group of queens for this episode
+let episode_cast = (double_premiere && i < 2) ? (i == 0 ? group1 : group2) : remainingQueens;
 
-    // Choose the group of queens for this episode
-    let episode_cast = (double_premiere && i < 2) ? (i == 0 ? group1 : group2) : remainingQueens;
+// Create a div to contain the queen images
+let queenContainer = document.createElement('div');
+queenContainer.className = "queen-container";
+queenContainer.style.display = "flex";
+queenContainer.style.flexWrap = "wrap";
+queenContainer.style.justifyContent = "center";
+queenContainer.style.listStyleType = "none";
 
-    // Display the remaining queens
-    for (let queen of episode_cast) {
-        output.innerHTML += `<div class="queen">${queen}</div>`;
+// Add each queen image to the container
+if (!castCopy) {
+    castCopy = JSON.parse(JSON.stringify(cast));
+}
+
+// Sort the castCopy array based on elimination order
+castCopy.sort((queenA, queenB) => {
+    if (eliminationOrder.includes(queenA) && !eliminationOrder.includes(queenB)) {
+        return 1; // queenA is eliminated, move it to the end
+    } else if (!eliminationOrder.includes(queenA) && eliminationOrder.includes(queenB)) {
+        return -1; // queenB is eliminated, move it to the end
+    } else {
+        return 0; // no change in order
     }
+});
 
-    // Calculate scores for each queen
-    let scores = {};
-    for (let j = 0; j < episode_cast.length; j++) {
-        let queen = episode_cast[j];
-        let randomMultiplier = Math.random() * (1.25 - 0.75) + 0.75; // Adjusted range
-        scores[queen] = queen_stats[queen][challenges[challenge].type] * randomMultiplier;
-        console.log(`Episode ${i+1} - Score for ${queen}: ${queen_stats[queen][challenges[challenge].type]} (stat) * ${randomMultiplier.toFixed(2)} (random multiplier) = ${scores[queen].toFixed(2)}`);
+for (let queen of castCopy) {
+    let queenImage = document.createElement('img');
+    queenImage.src = queen_stats[queen].promo;
+    queenImage.alt = queen;
+    queenImage.className = eliminationOrder.includes(queen) ? "eliminated grayscale" : ""; // Add "eliminated" and "grayscale" classes to eliminated queen image
+    queenImage.style.width = "190px"; // Set the image width
+    queenImage.style.height = "190px"; // Set the image height
+    queenImage.style.borderRadius = "5px"; // Set the border radius
+    queenImage.style.marginRight = "10px"; // Set the right margin
+    queenImage.style.border = "1px solid black"; // Set the border color and width
+    queenContainer.appendChild(queenImage);
+}
+// Add the queen container to the output
+output.appendChild(queenContainer);
+
+// 2. Introduce the Container - Modify this section as follows:
+output.innerHTML += `<div class="queen-container">`; 
+
+output.innerHTML += `</div>`; 
+
+// Calculate scores for each queen
+let scores = {};
+for (let j = 0; j < episode_cast.length; j++) {
+    let queen = episode_cast[j];
+    let randomMultiplier = Math.random() * (1.1 - 0.7) + 0.7; // Increased range
+    scores[queen] = queen_stats[queen][challenges[challenge].type] * randomMultiplier;
+}
+let challengeType = challenges[challenge].type;
+let placementMessages = {
+    'winner': (queen, scores, challenge) => {
+        let challengeType = challenges[challenge].type;
+        let doubleWin = challenges[challenge].doubleWin;
+        let challengeDescription = challenges[challenge].description;
+        let feedback = '';
+        if (challenge === 'Whatcha Unpackin?') {
+            feedback = `You unpacked those suitcases and packed a punch with your look!`;
+        }
+        else if (challenge === 'Good God, Girl Get Out') {
+            feedback = `You were a scream queen! Your acting skills were amazing and hilarious.`;
+        }
+        else if (challenge === 'Diva Worship"') {
+            feedback = `You were a divine diva! Your talk show hosting was charismatic and convincing.`;
+        }
+        else if (challenge === 'Trump: The Rusical') {
+            feedback = `You were a political parody! Your musical performance was flawless and fabulous.`;
+        }
+        else if (challenge === 'Monster Ball') {
+            feedback = `You were a monstrous beauty! Your monster-themed looks were stunning and fierce.`;
+        }
+        else if (challengeType === 'acting' || challengeType === 'acting2') {
+            feedback = `Your performance was captivating, you truly embodied your character.`;
+        } else if (challengeType === 'improv') {
+            feedback = `Your improvisation skills were on point, you kept us laughing the whole time.`;
+        } else if (challengeType === 'ball') {
+            feedback = `You really had a ball out there, darling! Your looks were a perfect strike.`;
+        } else if (challengeType === 'fashion') {
+            feedback = `Your fashion game was strong, you served looks that left us speechless.`;
+        } else {
+            feedback = `You excelled in this challenge, showcasing your unique talents.`;
+        }
+        return `${queen} - ${feedback} Condragulations, You're the winner of this week's challenge. `;
+    },
+    'high': (queen, scores, challenge) => {
+    let challengeType = challenges[challenge].type;  // Add this line to get the challengeType
+    let feedback = '';
+    if (challengeType === 'fashion') {
+        feedback = `Your look was impressive, you really stood out on the runway.`;
+    } else if (challengeType === 'acting' || challengeType === 'acting2') {
+        feedback = `Your performance was strong, you really stood out on the stage.`;
+    } else if (challengeType === 'improv') {
+        feedback = `Your improvisation was impressive, you kept us entertained.`;
+    } else if (challengeType === 'ball') {
+        feedback = `You bowled us over with your looks tonight, darling!`;
+    }     
+    return `${queen} - ${feedback} You're safe. Good job this week. `;
+},
+'top2': (queen, scores, challenge) => {
+        let challengeType = challenges[challenge].type;  // Add this line to get the challengeType
+        let feedback = '';
+        if (challengeType === 'fashion') {
+            feedback = `Your look was decent, but it didn't stand out as much as we would have liked.`;
+        } else if (challengeType === 'acting' || challengeType === 'acting2') {
+            feedback = `Your performance was decent, but it didn't stand out as much as we would have liked.`;
+        } else if (challengeType === 'improv') {
+            feedback = `Your improv performance was solid, but didn't quite stand out.`;
+        } else if (challengeType === 'ball') {
+            feedback = `Your performance was right down the alley, but didn't quite knock all the pins over.`;
+        }      
+        return `${queen} -  ${feedback} You are the top 2 queen of the week, you are safe to slay another day.`;
+    },
+
+    'safe': (queen, scores, challenge) => {
+        let challengeType = challenges[challenge].type;  // Add this line to get the challengeType
+        let feedback = '';
+        if (challengeType === 'fashion') {
+            feedback = `Your look was decent, but it didn't stand out as much as we would have liked.`;
+        } else if (challengeType === 'acting' || challengeType === 'acting2') {
+            feedback = `Your performance was decent, but it didn't stand out as much as we would have liked.`;
+        } else if (challengeType === 'improv') {
+            feedback = `Your improv performance was solid, but didn't quite stand out.`;
+        } else if (challengeType === 'ball') {
+            feedback = `Your performance was right down the alley, but didn't quite knock all the pins over.`;
+        }      
+        return `${queen} -  ${feedback} You're safe.`;
+    },
+    'low': (queen, scores, challenge) => {
+        let challengeType = challenges[challenge].type;  // Add this line to get the challengeType
+        let feedback = '';
+        if (challengeType === 'fashion') {
+            feedback = `Your look didn't quite hit the mark, we know you can do better.`;
+        } else if (challengeType === 'acting' || challengeType === 'acting2') {
+            feedback = `Your performance didn't quite hit the mark, we know you can do better.`;
+        } else if (challengeType === 'improv') {
+            feedback = `Your improv performance could use some work, it didn't quite hit the mark.`;
+        } else if (challengeType === 'ball') {
+            feedback = `Your looks didn't quite roll us over.`;
+        }      
+        return `${queen} - ${feedback} You're safe, but you need to step it up. `;
+    },
+    'bottom': (queen, scores, challenge) => {
+        let challengeType = challenges[challenge].type;  // Add this line to get the challengeType
+        let feedback = '';
+        if (challengeType === 'fashion') {
+            feedback = `Your look was not up to par, and it landed you in the bottom.`;
+        } else if (challengeType === 'acting' || challengeType === 'acting2') {
+            feedback = `Your performance was not up to par, and it landed you in the bottom.`;
+        } else if (challengeType === 'improv') {
+            feedback = `Your improv performance fell flat, it didn't resonate with us.`;
+        } else if (challengeType === 'ball') {
+            feedback = `Your looks guttered out tonight.`;
+        }   
+        return `${queen} - ${feedback} I'm sorry my dear but you are up for elimination. `;
     }
-
-
+};
     // Sort queens based on their scores
     let sorted_queens = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
 
@@ -455,40 +828,63 @@ for (let i = 0; i < Object.keys(challenges).length; i++) {
         let top2 = sorted_queens[1];
         currentPlacements[winner] = 'WIN';
         currentPlacements[top2] = 'TOP2';
+        // Add two queens placing HIGH
+        let high1 = sorted_queens[2];
+        let high2 = sorted_queens[3];
+        currentPlacements[high1] = 'HIGH';
+        currentPlacements[high2] = 'HIGH';
         // The rest of the queens are safe
-        for (let queen of sorted_queens.slice(2)) {
+        for (let queen of sorted_queens.slice(4)) {
             currentPlacements[queen] = 'SAFE';
         }
 
         // Display the placements
-        output.innerHTML += `<br><div class="placement winner"><img src="${queen_stats[winner].image}" alt="${winner}"><strong>${winner} (${scores[winner].toFixed(2)})</strong><span>Congratulations, you are the winner of this challenge!</span></div><br>`;
-        output.innerHTML += `<div class="placement top2"><img src="${queen_stats[top2].image}" alt="${top2}"><strong>${top2} (${scores[top2].toFixed(2)})</strong><span>You are the top 2 queen of the week, you are safe to slay another day!</span></div>`;
-        for (let queen of sorted_queens.slice(2)) {
-            output.innerHTML += `<div class="placement safe"><img src="${queen_stats[queen].image}" alt="${queen}"><strong>${queen} (${scores[queen].toFixed(2)})</strong><span>You are safe.</span></div>`;
-        }
-    } else {
-// For the rest of the episodes, use your existing logic
-let winner = sorted_queens[0];
-let high_queens = sorted_queens.slice(1, 3);
-let low_queen = sorted_queens[sorted_queens.length - 3];
-let bottom_2 = sorted_queens.slice(sorted_queens.length - 2);
+        output.innerHTML += `<div class="placement winner blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[winner].image}" alt="${winner}"><span>${placementMessages['winner'](winner, scores, challenge)}</span></div>`;
+        output.innerHTML += `<div class="placement top2 blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[top2].image}" alt="${top2}"><span>${placementMessages['top2'](top2, scores, challenge)}</span></div>`;
+        output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[high1].image}" alt="${high1}"><span>${placementMessages['high'](high1, scores, challenge)}</span></div>`;
+        output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[high2].image}" alt="${high2}"><span>${placementMessages['high'](high2, scores, challenge)}</span></div>`;
+        for (let queen of sorted_queens.slice(4)) {
+            output.innerHTML += `<div class="placement safe blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
+        } 
+}else {
+    // For the rest of the episodes, use your existing logic
+    let winner = sorted_queens[0];
+    let high_queens = sorted_queens.slice(1, 3);
+    let low_queen = sorted_queens[sorted_queens.length - 3];
+    let bottom_2 = sorted_queens.slice(sorted_queens.length - 2);
 
-for (let queen of episode_cast) {
-    if (season == '9' && i == 0) {
-        if (queen === winner) {
-            currentPlacements[queen] = 'WIN';
-        } else if (high_queens.includes(queen)) {
-            currentPlacements[queen] = 'HIGH';
-        } else {
-            currentPlacements[queen] = 'SAFE';
-        }
-    } else if (challenges[challenge].doubleWin && sorted_queens.slice(0, 2).includes(queen)) {
+    for (let queen of episode_cast) {
+        if (season == '9' && i == 0) {
+            if (queen === winner) {
+                currentPlacements[queen] = 'WIN';
+            } else if (high_queens.includes(queen)) {
+                currentPlacements[queen] = 'HIGH';
+            } else {
+                currentPlacements[queen] = 'SAFE';
+            }
+        } else if (challenge === 'LaLaPaRUza') {
+            console.log('Entered LaLaPaRUza condition');
+            let win_queen = sorted_queens[0];
+            let high_queens = sorted_queens.slice(1, 4);
+
+            for (let queen of sorted_queens) {
+                if (queen === win_queen) {
+                    currentPlacements[queen] = 'WIN';
+                } else if (high_queens.includes(queen)) {
+                    currentPlacements[queen] = 'HIGH';
+                } else {
+                    currentPlacements[queen] = 'SAFE';
+                }
+            }
+        } else if (/all stars\s*\d*/i.test(season)) {
+    console.log('Entered All Stars condition');
+    let top_2 = sorted_queens.slice(0, 2);
+    if (top_2[0] === queen) {
         currentPlacements[queen] = 'WIN';
-    } else if (challenges[challenge].doubleWin && sorted_queens.slice(2, 3).includes(queen)) {
-        currentPlacements[queen] = 'HIGH';
-    } else if (queen === winner) {
+    } else if (top_2[1] === queen) {
         currentPlacements[queen] = 'WIN';
-    } else if (high_queens.includes(queen)) {
+        secondWinners[i] = queen; // Store the second winner for this episode
+    }else if (sorted_queens.slice(2, 3).includes(queen)) {
         currentPlacements[queen] = 'HIGH';
     } else if (queen === low_queen) {
         currentPlacements[queen] = 'LOW';
@@ -497,36 +893,78 @@ for (let queen of episode_cast) {
     } else {
         currentPlacements[queen] = 'SAFE';
     }
-}
-
-// Display the placements
+        } else if (challenges[challenge].doubleWin && sorted_queens.slice(0, 2).includes(queen)) {
+            currentPlacements[queen] = 'WIN';
+        } else if (challenges[challenge].doubleWin && sorted_queens.slice(2, 3).includes(queen)) {
+            currentPlacements[queen] = 'HIGH';
+        } else if (queen === winner) {
+            currentPlacements[queen] = 'WIN';
+        } else if (high_queens.includes(queen)) {
+            currentPlacements[queen] = 'HIGH';
+        } else if (queen === low_queen) {
+            currentPlacements[queen] = 'LOW';
+        } else if (bottom_2.includes(queen)) {
+            currentPlacements[queen] = 'BTM2';
+        } else {
+            currentPlacements[queen] = 'SAFE';
+        }
+    }
+// Use the messages in your existing code
 if (season == '9' && i == 0) {
-    output.innerHTML += `<br><div class="placement winner"><img src="${queen_stats[winner].image}" alt="${winner}"><strong>${winner} (${scores[winner].toFixed(2)})</strong><span>Congratulations, you are the winner of this challenge!</span></div><br>`;
+    output.innerHTML += `<div class="placement winner blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[winner].image}" alt="${winner}"><span>${placementMessages['winner'](winner, scores, challenge)}</span></div>`;
     for (let queen of high_queens) {
-        output.innerHTML += `<div class="placement high"><img src="${queen_stats[queen].image}" alt="${queen}"><strong>${queen} (${scores[queen].toFixed(2)})</strong><span>You are safe, good job!</span></div>`;
+        output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['high'](queen, scores, challenge)}</span></div>`;
     }
     for (let queen of sorted_queens.slice(3)) {
-        output.innerHTML += `<div class="placement safe"><img src="${queen_stats[queen].image}" alt="${queen}"><strong>${queen} (${scores[queen].toFixed(2)})</strong><span>You are safe.</span></div>`;
+        output.innerHTML += `<div class="placement safe blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
     }
+} else if (challenge === 'LaLaPaRUza') {
+    output.innerHTML += `<div class="placement winner blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[sorted_queens[0]].image}" alt="${sorted_queens[0]}"><span>${placementMessages['winner'](sorted_queens[0], scores, challenge)}</span></div>`;
+    output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[sorted_queens[1]].image}" alt="${sorted_queens[1]}"><span>${placementMessages['high'](sorted_queens[1], scores, challenge)}</span></div>`;
+    for (let queen of sorted_queens.slice(2)) {
+        output.innerHTML += `<div class="placement safe blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
+    }
+} else if (/all stars\s*\d*/i.test(season)) {
+    let top_2 = sorted_queens.slice(0, 2);
+    let high_queen = sorted_queens[2];
+    for (let queen of sorted_queens.slice(3, sorted_queens.length - 3)) {
+        output.innerHTML += `<div class="placement safe" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
+    }
+    for (let i = 0; i < top_2.length; i++) {
+    let queen = top_2[i];
+    let winnerClass = i == 0 ? 'winner-first' : 'winner-second';
+    output.innerHTML += `<div class="placement ${winnerClass} blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['winner'](queen, scores, challenge)}</span></div>`;
+}
+    output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[high_queen].image}" alt="${high_queen}"><span>${placementMessages['high'](high_queen, scores, challenge)}</span></div>`;
+    output.innerHTML += `<div class="placement low blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[low_queen].image}" alt="${low_queen}"><span>${placementMessages['low'](low_queen, scores, challenge)}</span></div>`;
+    for (let queen of bottom_2) {
+        output.innerHTML += `<div class="placement bottom blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['bottom'](queen, scores, challenge)}</span></div>`;
+    }
+
 } else if (challenges[challenge].doubleWin) {
     for (let queen of sorted_queens.slice(0, 2)) {
-        output.innerHTML += `<br><div class="placement winner"><img src="${queen_stats[queen].image}" alt="${queen}"><strong>${queen} (${scores[queen].toFixed(2)})</strong><span>Congratulations, you are the winner of this challenge!</span></div><br>`;
+        output.innerHTML += `<div class="placement winner blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['winner'](queen, scores, challenge)}</span></div>`;
     }
     let high_queen = sorted_queens[2];
-    output.innerHTML += `<div class="placement high"><img src="${queen_stats[high_queen].image}" alt="${high_queen}"><strong>${high_queen} (${scores[high_queen].toFixed(2)})</strong><span>You are safe, good job!</span></div>`;
-    output.innerHTML += `<br><div class="placement low"><img src="${queen_stats[low_queen].image}" alt="${low_queen}"><strong>${low_queen} (${scores[low_queen].toFixed(2)})</strong><span>Step it up, you are safe.</span></div><br>`;
+    output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[high_queen].image}" alt="${high_queen}"><span>${placementMessages['high'](high_queen, scores, challenge)}</span></div>`;
+    output.innerHTML += `<div class="placement low blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[low_queen].image}" alt="${low_queen}"><span>${placementMessages['low'](low_queen, scores, challenge)}</span></div>`;
     for (let queen of bottom_2) {
-        output.innerHTML += `<div class="placement bottom"><img src="${queen_stats[queen].image}" alt="${queen}"><strong>${queen} (${scores[queen].toFixed(2)})</strong><span>I'm sorry my dear but you are up for elimination.</span></div>`;
+        output.innerHTML += `<div class="placement bottom blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['bottom'](queen, scores, challenge)}</span></div>`;
     }
 } else {
-    output.innerHTML += `<br><div class="placement winner"><img src="${queen_stats[winner].image}" alt="${winner}"><strong>${winner} (${scores[winner].toFixed(2)})</strong><span>Congratulations, you are the winner of this challenge!</span></div><br>`;
-    for (let queen of high_queens) {
-        output.innerHTML += `<div class="placement high"><img src="${queen_stats[queen].image}" alt="${queen}"><strong>${queen} (${scores[queen].toFixed(2)})</strong><span>You are safe, good job!</span></div>`;
-    }
-    output.innerHTML += `<br><div class="placement low"><img src="${queen_stats[low_queen].image}" alt="${low_queen}"><strong>${low_queen} (${scores[low_queen].toFixed(2)})</strong><span>Step it up, you are safe.</span></div><br>`;
-    for (let queen of bottom_2) {
-        output.innerHTML += `<div class="placement bottom"><img src="${queen_stats[queen].image}" alt="${queen}"><strong>${queen} (${scores[queen].toFixed(2)})</strong><span>I'm sorry my dear but you are up for elimination.</span></div>`;
-    }
+    output.innerHTML += `
+<div class="placement winner blur" onclick="this.classList.remove('blur')">
+    <img src="${queen_stats[winner].image}" alt="${winner}">
+    <span>${placementMessages['winner'](winner, scores, challenge)}</span>
+</div>
+`;
+for (let queen of high_queens) {
+    output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['high'](queen, scores, challenge)}</span></div>`;
+}
+output.innerHTML += `<div class="placement low blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[low_queen].image}" alt="${low_queen}"><span>${placementMessages['low'](low_queen, scores, challenge)}</span></div>`;
+for (let queen of bottom_2) {
+    output.innerHTML += `<div class="placement bottom blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['bottom'](queen, scores, challenge)}</span></div>`;
+}
 }
 }
 
@@ -541,22 +979,42 @@ if (season == '9' && i == 0) {
 // Clear the form
 document.getElementById('eliminationForm').innerHTML = '';
 
-// Create the dropdown
-let dropdown = document.createElement('select');
-dropdown.id = 'eliminatedQueen';
+// Create the dropdown for eliminated queens
+let eliminatedDropdown = document.createElement('select');
+eliminatedDropdown.id = 'eliminatedQueen';
 let noneOption = document.createElement('option');
 noneOption.value = 'none';
 noneOption.text = 'none';
-dropdown.appendChild(noneOption);
+eliminatedDropdown.appendChild(noneOption);
 for (let queen of remainingQueens) {
     let option = document.createElement('option');
     option.value = queen;
     option.text = queen;
-    dropdown.appendChild(option);
+    eliminatedDropdown.appendChild(option);
 }
 
-// Add the dropdown to the form
-document.getElementById('eliminationForm').appendChild(dropdown);
+// Add the eliminated queens dropdown to the form
+document.getElementById('eliminationForm').appendChild(eliminatedDropdown);
+
+// Create the dropdown for returning queens
+let returningDropdown = document.createElement('select');
+returningDropdown.id = 'returningQueen';
+let noneOption2 = document.createElement('option');
+noneOption2.value = 'none';
+noneOption2.text = 'none';
+returningDropdown.appendChild(noneOption2);
+
+let notRemainingQueens = []; // Array to hold queens not in remainingQueens
+
+for (let queen of eliminatedQueens) {
+    let option = document.createElement('option');
+    option.value = queen;
+    option.text = queen;
+    returningDropdown.appendChild(option);
+}
+
+// Add the returning queens dropdown to the form
+document.getElementById('eliminationForm').appendChild(returningDropdown);
 
 // Create the submit button
 let submitButton = document.createElement('input');
@@ -565,38 +1023,78 @@ submitButton.value = 'Submit';
 
 // Add the submit button to the form
 document.getElementById('eliminationForm').appendChild(submitButton);
-// Ask the user to choose which queen to eliminate
+
+// Ask the user to choose which queen to eliminate and which queen to return
 let eliminated = await new Promise(resolve => {
     document.getElementById('eliminationForm').style.display = 'block';
     document.getElementById('eliminationForm').addEventListener('submit', function(event) {
         event.preventDefault();
         let eliminated = document.getElementById('eliminatedQueen').value;
+        let returning = document.getElementById('returningQueen').value;
         document.getElementById('eliminationForm').style.display = 'none';
-        resolve(eliminated);
+        resolve({ eliminated, returning });
     });
 });
+let lock = false;
 
-if (eliminated != 'none') {               
-            output.innerHTML += `<div class="queen eliminated">${eliminated}</div><br>`;
-            // Remove the eliminated queen from the remaining queens
-            remainingQueens = remainingQueens.filter(queen => queen !== eliminated);
-        }
-
-// If a queen is eliminated, update her placement to 'ELIM'
-if (eliminated != 'none') {
-    currentPlacements[eliminated] = 'ELIM';
-    // Remove the queen's name from the cast
-    cast = cast.filter(queen => queen !== eliminated);
-    // Add the queen's name to the elimination order
-    eliminationOrder.unshift(eliminated);
+if (eliminated.eliminated != 'none' && !lock) {
+    lock = true;
+    // Log the current state of the eliminatedQueens array
+    output.innerHTML += `
+    <div class="placement queen eliminated">
+        <img src="${queen_stats[eliminated.eliminated].image}" alt="${eliminated.eliminated}">
+        <span>${eliminated.eliminated} - Sashay away.</span>
+    </div>
+    <br>
+    `;
+    // Remove the eliminated queen from the remaining queens
+    remainingQueens = remainingQueens.filter(queen => queen !== eliminated.eliminated);
+    // Add the eliminated queen to the eliminated queens if she's not already there
+    if (!eliminatedQueens.includes(eliminated.eliminated)) {
+        eliminatedQueens.push(eliminated.eliminated);
+    }
+    lock = false;
+    // Log the new state of the eliminatedQueens array
 }
 
+if (eliminated.returning != 'none') {
+    // Log the current state of the eliminatedQueens array
+    output.innerHTML += `
+    <div class="placement queen returning">
+        <img src="${queen_stats[eliminated.returning].image}" alt="${eliminated.returning}">
+        <span>${eliminated.returning} - Welcome back!</span>
+    </div>
+    <br>
+    `;
+    // Add the returning queen back to the remaining queens
+    remainingQueens.push(eliminated.returning);
+    // Remove the returning queen from the cast
+    cast = cast.filter(queen => queen !== eliminated.returning);
+    // Add the returning queen back to the end of the cast
+    cast.push(eliminated.returning);
+    // Log the new state of the eliminatedQueens array
+}
+
+
+// If a queen is eliminated, update her placement to 'ELIM'
+if (eliminated.eliminated != 'none') {
+    currentPlacements[eliminated.eliminated] = 'ELIM';
+    // Add the queen's name to the elimination order
+    eliminationOrder.unshift(eliminated.eliminated);
+    // Add the queen's name to the eliminatedQueens array if she's not already there
+    if (!eliminatedQueens.includes(eliminated.eliminated)) {
+        eliminatedQueens.push(eliminated.eliminated);
+    }
+    // Remove the queen's name from the cast
+    cast = cast.filter(queen => queen !== eliminated.eliminated);
+}
 // Create a container for the table
 let container = document.createElement('div');
 container.style.display = 'grid';  // Use CSS Grid
 container.style.gridTemplateColumns = 'minmax(400px, 1fr) repeat(auto-fill, minmax(50px, 100px))';  // Set the width of the columns
 container.style.maxWidth = '1000px';  // Set a maximum width for the container
 container.style.margin = '0 auto';  // Center the container
+container.style.overflow = 'auto';  // Add a scrollbar when the content overflows
 // Create the table inside the container
 let table = document.createElement('table');
 table.className = 'wikitable';
@@ -613,7 +1111,7 @@ headerCell.innerText = 'Queen';
 headerCell.style.backgroundColor = '#f2e4f2';  // Change the background color
 headerCell.style.color = '#0a2379';  // Change the font color
 headerCell.style.fontWeight = 'bold';  // Make the font bold
-headerCell.style.width = '400px';  // Set a fixed width for the cell
+headerCell.style.width = '250px';  // Set a fixed width for the cell
 
 for (let i = 0; i < episodePlacements.length; i++) {
     let episodeCell = headerRow.insertCell();
@@ -621,21 +1119,21 @@ for (let i = 0; i < episodePlacements.length; i++) {
     episodeCell.style.backgroundColor = '#f2e4f2';  // Change the background color
     episodeCell.style.color = '#0a2379';  // Change the font color
     episodeCell.style.fontWeight = 'bold';  // Make the font bold
-    episodeCell.style.width = '75px';  // Set the width of the cell
+    episodeCell.style.width = '50px';  // Set the width of the cell
 }
 
 // Sort the cast based on the elimination order
 cast.sort((a, b) => {
     let indexA = eliminationOrder.indexOf(a);
     let indexB = eliminationOrder.indexOf(b);
-    // If a queen was never eliminated, treat her as if she was eliminated last
-    indexA = indexA === -1 ? eliminationOrder.length : indexA;
-    indexB = indexB === -1 ? eliminationOrder.length : indexB;
+    // If a queen was never eliminated or has returned, treat her as if she was eliminated last
+    indexA = (indexA === -1 || remainingQueens.includes(a)) ? eliminationOrder.length : indexA;
+    indexB = (indexB === -1 || remainingQueens.includes(b)) ? eliminationOrder.length : indexB;
     return indexA - indexB;
 });
 
 // Create a new array that contains the queens in the order they were eliminated
-let sortedCast = [...cast, ...eliminationOrder];
+let sortedCast = [...new Set([...cast, ...eliminationOrder])];
 
 // Create a row for each queen
 for (let queen of sortedCast) {
@@ -660,10 +1158,15 @@ for (let i = 0; i < episodePlacements.length; i++) {
         if (!cell.innerText) {
             cell.style.backgroundColor = 'darkgray';
         }
-        // Add the appropriate class to the cell based on the queen's placement
-        if (episodePlacements[i][queenName]) {
-            cell.className = episodePlacements[i][queenName];
-        }
+// Add the appropriate class to the cell based on the queen's placement
+if (episodePlacements[i][queenName]) {
+    cell.className = episodePlacements[i][queenName];
+
+    // If the queen is the second winner for this episode and her placement is 'WIN', add the 'WIN-SECOND' class
+    if (queenName == secondWinners[i] && episodePlacements[i][queenName] == 'WIN') {
+        cell.classList.add('WIN-SECOND');
+    }
+}
     }
 }
 }
