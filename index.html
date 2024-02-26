@@ -77,6 +77,7 @@ button {
     }
     .WIN { background-color: royalblue; color: white; font-weight: bold; }  
     .WIN-SECOND { background-color: yellow; color: rgb(0, 0, 0); font-weight: bold; }
+    .IN { background-color: darkblue; color: white; font-weight: bold; }
     .TOP2 { background-color: cyan; }
     .HIGH { background-color: lightblue; }
     .SAFE { background-color: cornsilk; }
@@ -217,7 +218,9 @@ li {
             background-color: tomato;
         }
         .returning {
-            background-color: rgb(132, 255, 142);
+            background-color: darkblue;
+            color : white;
+            font-weight: bold;
         }
         .eliminated img {
     filter: grayscale(100%);
@@ -237,10 +240,6 @@ background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;    
     border-radius: 5px; 
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  
-}
-.blur {
-    filter: blur(10px);
-    transition: 0.3s;
 }
 .track-record td {
     border: 1px solid #ddd;
@@ -611,9 +610,9 @@ for (let season in seasons) {
 }
 
 async function simulateSeason(season) {
-        // Log the season name and All Stars status
-        console.log('Simulating season:', season);
-    console.log('Is All Stars:', seasons[season][3]);
+// Declare a variable at a higher scope level
+let eliminatedQueen = '';
+let currentEliminatedQueen = '';
     let secondWinners = [];
     let secondWinner = null;
 let cast = seasons[season][0];
@@ -683,11 +682,13 @@ castCopy.sort((queenA, queenB) => {
     }
 });
 
+// Now, you can access 'eliminatedQueen' in your loop
 for (let queen of castCopy) {
     let queenImage = document.createElement('img');
     queenImage.src = queen_stats[queen].promo;
     queenImage.alt = queen;
-    queenImage.className = eliminationOrder.includes(queen) ? "eliminated grayscale" : ""; // Add "eliminated" and "grayscale" classes to eliminated queen image
+    // If the queen is in the eliminationOrder and is not the returning queen, add the "eliminated grayscale" classes
+    queenImage.className = eliminationOrder.includes(queen) && queen !== eliminatedQueen ? "eliminated grayscale" : "";
     queenImage.style.width = "100px"; // Set the image width
     queenImage.style.height = "100px"; // Set the image height
     queenImage.style.borderRadius = "20px"; // Set the border radius to create a circular shape
@@ -844,7 +845,7 @@ let placementMessages = {
         output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[high1].image}" alt="${high1}"><span>${placementMessages['high'](high1, scores, challenge)}</span></div>`;
         output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[high2].image}" alt="${high2}"><span>${placementMessages['high'](high2, scores, challenge)}</span></div>`;
         for (let queen of sorted_queens.slice(4)) {
-            output.innerHTML += `<div class="placement safe blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
+            output.innerHTML += `<div class="placement safe" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
         } 
 }else {
     // For the rest of the episodes, use your existing logic
@@ -863,19 +864,17 @@ let placementMessages = {
                 currentPlacements[queen] = 'SAFE';
             }
         } else if (challenge === 'LaLaPaRUza') {
-            console.log('Entered LaLaPaRUza condition');
-            let win_queen = sorted_queens[0];
-            let high_queens = sorted_queens.slice(1, 4);
+    console.log('Entered LaLaPaRUza condition');
 
-            for (let queen of sorted_queens) {
-                if (queen === win_queen) {
-                    currentPlacements[queen] = 'WIN';
-                } else if (high_queens.includes(queen)) {
-                    currentPlacements[queen] = 'HIGH';
-                } else {
-                    currentPlacements[queen] = 'SAFE';
-                }
-            }
+    for (let queen of sorted_queens) {
+        currentPlacements[queen] = 'SAFE';
+    }
+
+    // Get the returning queen
+    let returningQueen = document.getElementById('returningQueen').value;
+
+    // Log the current placements
+    console.log('Current placements:', currentPlacements);
         } else if (/all stars\s*\d*/i.test(season)) {
     console.log('Entered All Stars condition');
     let top_2 = sorted_queens.slice(0, 2);
@@ -916,13 +915,11 @@ if (season == '9' && i == 0) {
         output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['high'](queen, scores, challenge)}</span></div>`;
     }
     for (let queen of sorted_queens.slice(3)) {
-        output.innerHTML += `<div class="placement safe blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
+        output.innerHTML += `<div class="placement safe" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
     }
 } else if (challenge === 'LaLaPaRUza') {
-    output.innerHTML += `<div class="placement winner blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[sorted_queens[0]].image}" alt="${sorted_queens[0]}"><span>${placementMessages['winner'](sorted_queens[0], scores, challenge)}</span></div>`;
-    output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[sorted_queens[1]].image}" alt="${sorted_queens[1]}"><span>${placementMessages['high'](sorted_queens[1], scores, challenge)}</span></div>`;
-    for (let queen of sorted_queens.slice(2)) {
-        output.innerHTML += `<div class="placement safe blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
+    for (let queen of sorted_queens) {
+        output.innerHTML += `<div class="placement safe" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
     }
 } else if (/all stars\s*\d*/i.test(season)) {
     let top_2 = sorted_queens.slice(0, 2);
@@ -1024,7 +1021,7 @@ submitButton.value = 'Submit';
 // Add the submit button to the form
 document.getElementById('eliminationForm').appendChild(submitButton);
 
-// Ask the user to choose which queen to eliminate and which queen to return
+// Inside the Promise, add the eliminated queen to the 'eliminationOrder' array
 let eliminated = await new Promise(resolve => {
     document.getElementById('eliminationForm').style.display = 'block';
     document.getElementById('eliminationForm').addEventListener('submit', function(event) {
@@ -1032,6 +1029,12 @@ let eliminated = await new Promise(resolve => {
         let eliminated = document.getElementById('eliminatedQueen').value;
         let returning = document.getElementById('returningQueen').value;
         document.getElementById('eliminationForm').style.display = 'none';
+        // Add the eliminated queen to the 'eliminationOrder' array
+        eliminationOrder.push(eliminated);
+        // If a queen returns, update 'eliminatedQueen'
+        if (returning !== 'none') {
+            eliminatedQueen = returning;
+        }
         resolve({ eliminated, returning });
     });
 });
@@ -1072,7 +1075,12 @@ if (eliminated.returning != 'none') {
     cast = cast.filter(queen => queen !== eliminated.returning);
     // Add the returning queen back to the end of the cast
     cast.push(eliminated.returning);
-    // Log the new state of the eliminatedQueens array
+    // If the current episode is 'LaLaPaRUza', set the 'IN' placement for the returning queen
+    if (challenge === 'LaLaPaRUza') {
+    currentPlacements[eliminated.returning] = 'IN';
+} else if (challenge === 'Conjoined Queens') {
+    currentPlacements[eliminated.returning] = 'WIN';
+}   // Log the new state of the eliminatedQueens array
 }
 
 
