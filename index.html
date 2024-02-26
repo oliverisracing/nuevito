@@ -390,7 +390,6 @@ let challenges_s07 = {
     "Divine Inspiration": {type: "rusical", doubleWin: false, description: "Queens must perform a musical tribute to John Waters."},
     "Prancing Queens": {type: "dance", doubleWin: true, description: "Queens must perform a dance inspired by various dance styles."},
     "Hello, Kitty Girls!": {type: "ball", doubleWin: false, description: "Queens must create a Hello Kitty-inspired couture look."},
-    "And The Rest Is Drag": {type: "acting", doubleWin: false, description: "Queens must act in the music video for RuPaul's song 'Born Naked'."},
 };
 
 let challenges_s10 = {
@@ -590,8 +589,6 @@ function shuffle(array) {
 // Iterate over the seasons
 for (let season in seasons) {
     // Log the season name and All Stars status
-    console.log('Season:', season);
-    console.log('Is All Stars:', seasons[season][3]);
     // Create a button for the season
     let button = document.createElement('button');
     button.innerText = season;
@@ -724,6 +721,9 @@ let placementMessages = {
         else if (challenge === 'Good God, Girl Get Out') {
             feedback = `You were a scream queen! Your acting skills were amazing and hilarious.`;
         }
+        else if (challenge === 'Revenge of The Queens') {
+        return `${queen} - You're a winner, baby!`;
+    }
         else if (challenge === 'Diva Worship"') {
             feedback = `You were a divine diva! Your talk show hosting was charismatic and convincing.`;
         }
@@ -864,7 +864,6 @@ let placementMessages = {
                 currentPlacements[queen] = 'SAFE';
             }
         } else if (challenge === 'LaLaPaRUza') {
-    console.log('Entered LaLaPaRUza condition');
 
     for (let queen of sorted_queens) {
         currentPlacements[queen] = 'SAFE';
@@ -872,18 +871,35 @@ let placementMessages = {
 
     // Get the returning queen
     let returningQueen = document.getElementById('returningQueen').value;
+} else if (challenge === 'Revenge of the Queens') {
 
-    // Log the current placements
-    console.log('Current placements:', currentPlacements);
-        } else if (/all stars\s*\d*/i.test(season)) {
-    console.log('Entered All Stars condition');
+let top_3 = sorted_queens.slice(0, 3);
+let bottom_2 = sorted_queens.slice(-2);
+
+secondWinners[i] = []; // Initialize secondWinners[i] as an array
+
+
+for (let queen of sorted_queens) {
+    if (top_3.includes(queen)) {
+        currentPlacements[queen] = 'WIN';
+        if (queen !== top_3[0]) { // If the queen is not the first in the top_3 array
+            secondWinners[i].push(queen); // Add the queen to the second winners
+        }
+    } else if (bottom_2.includes(queen)) {
+        currentPlacements[queen] = 'BTM2';
+    } else {
+        currentPlacements[queen] = 'SAFE';
+    }
+
+}
+} else if (/all stars\s*\d*/i.test(season)) {
     let top_2 = sorted_queens.slice(0, 2);
     if (top_2[0] === queen) {
         currentPlacements[queen] = 'WIN';
     } else if (top_2[1] === queen) {
         currentPlacements[queen] = 'WIN';
         secondWinners[i] = queen; // Store the second winner for this episode
-    }else if (sorted_queens.slice(2, 3).includes(queen)) {
+    } else if (sorted_queens.slice(2, 3).includes(queen)) {
         currentPlacements[queen] = 'HIGH';
     } else if (queen === low_queen) {
         currentPlacements[queen] = 'LOW';
@@ -909,7 +925,27 @@ let placementMessages = {
         }
     }
 // Use the messages in your existing code
-if (season == '9' && i == 0) {
+ if (challenge === 'Revenge of the Queens') {
+
+    // Update the top_3 array to contain the queens with the highest scores
+    let top_3 = sorted_queens.slice(0, 3);
+
+    // Update the bottom_2 array to contain the queens with the lowest scores
+    let bottom_2 = sorted_queens.slice(-2);
+    for (let queen of sorted_queens) {
+        if (top_3.includes(queen)) {
+            output.innerHTML += `<div class="placement winner blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['winner'](queen, scores, challenge)}</span></div>`;
+            if (queen !== top_3[0]) { // If the queen is not the first winner, she is a second winner
+                secondWinners[i] = queen; // Store the second winner for this episode
+            }
+        } else if (bottom_2.includes(queen)) {
+            output.innerHTML += `<div class="placement bottom blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['bottom'](queen, scores, challenge)}</span></div>`;
+        } else {
+            output.innerHTML += `<div class="placement safe" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
+        }
+    }
+}
+else if (season == '9' && i == 0) {
     output.innerHTML += `<div class="placement winner blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[winner].image}" alt="${winner}"><span>${placementMessages['winner'](winner, scores, challenge)}</span></div>`;
     for (let queen of high_queens) {
         output.innerHTML += `<div class="placement high blur" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['high'](queen, scores, challenge)}</span></div>`;
@@ -920,7 +956,7 @@ if (season == '9' && i == 0) {
 } else if (challenge === 'LaLaPaRUza') {
     for (let queen of sorted_queens) {
         output.innerHTML += `<div class="placement safe" onclick="this.classList.remove('blur')"><img src="${queen_stats[queen].image}" alt="${queen}"><span>${placementMessages['safe'](queen, scores, challenge)}</span></div>`;
-    }
+    } 
 } else if (/all stars\s*\d*/i.test(season)) {
     let top_2 = sorted_queens.slice(0, 2);
     let high_queen = sorted_queens[2];
@@ -1079,6 +1115,8 @@ if (eliminated.returning != 'none') {
     if (challenge === 'LaLaPaRUza') {
     currentPlacements[eliminated.returning] = 'IN';
 } else if (challenge === 'Conjoined Queens') {
+    currentPlacements[eliminated.returning] = 'WIN';
+} else if (challenge === 'Revenge of the Queens') {
     currentPlacements[eliminated.returning] = 'WIN';
 }   // Log the new state of the eliminatedQueens array
 }
