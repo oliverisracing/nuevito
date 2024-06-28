@@ -278,6 +278,7 @@ let cast_uk2 = ["A'Whora", "Asttina Mandella", "Bimini Bon-Boulash", "Cherry Val
 let cast_uk1 = ["Baga Chipz", "Blu Hydrangea", "Cheryl Hole", "Crystal", "Divina De Campo", "Gothy Kendoll", "Scaredy Kat", "Sum Ting Wong", "The Vivienne", "Vinegar Strokes"];
 let cast_s09 = ["Aja", "Alexis Michelle", "Charlie Hides", "Cynthia Lee Fontaine", "Eureka", "Farrah Moan", "Jaymes Mansfield", "Kimora Blac", "Nina Bo'nina Brown", "Peppermint", "Sasha Velour", "Shea Couleé", "Trinity Taylor", "Valentina"];
 let cast_s03 = ["Raja", "Manila Luzon", "Alexis Mateo", "Yara Sofia", "Carmen Carrera", "Shangela", "Delta Work", "Stacy Layne Matthews", "Mariah", "India Ferrah", "Mimi Imfurst", "Phoenix", "Venus D-Lite"];
+let cast_s02 = ["Mystique With The Good Kitty", "Sista Kumquat", "Operetta Phantom", "Black Majesty", "Heartbreak Harley", "Inkling Gurlll", "Emerald Envy", "Miss Eveelicious", "The Dark Raven", "Fangeria Kickz", "Zimfinity", "Shinobitch", "La Lola", "Only Link"];
 // Define the stats for each queen based on their performance in the original season
 let queen_stats_s11 = {
     "A'keria C. Davenport": {"rusical": 8,"comedy": 4, "dance": 10, "acting": 6, "fashion": 10, "runway": 8, "improv": 8, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 9, "image": "Mugs/AkeriaS11.webp", "promo": "Promos/Akeria.webp"},
@@ -295,6 +296,22 @@ let queen_stats_s11 = {
     "Soju": {"rusical": 4,"comedy": 1, "dance": 1, "acting": 2, "fashion": 1, "runway": 4, "improv": 2, "snatch_game": 2, "lipsync": 4, "ball": 1, "makeover": 4, "image": "Mugs/Soju.webp", "promo": "Promos/Soju.webp"},
     "Vanessa Vanjie Mateo": {"rusical": 8,"comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 6, "improv": 4, "snatch_game": 4, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/VanessaS11.webp", "promo": "Promos/VanessaS11.webp"},
     "Yvie Oddly": {"rusical": 11,"comedy": 6, "dance": 10, "acting": 10, "fashion": 8, "runway": 10, "improv": 11, "snatch_game": 5, "lipsync": 10, "ball": 10, "makeover": 7, "image": "Mugs/YvieS11.webp", "promo": "Promos/Yvie.webp"}
+};
+let queen_stats_s02 = {
+    "Mystique With The Good Kitty": {"rusical": 8, "comedy": 6, "dance": 8, "acting": 6, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Mystique.webp", "promo": "Promos/Mystique.webp"},
+    "Sista Kumquat": {"rusical": 10, "comedy": 9, "dance": 8, "acting": 9, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 15, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Sista.webp", "promo": "Promos/Sista.webp"},
+    "Operetta Phantom": {"rusical": 6, "comedy": 8, "dance": 6, "acting": 8, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Operetta.webp", "promo": "Promos/Operetta.webp"},
+    "Black Majesty": {"rusical": 6, "comedy": 8, "dance": 6, "acting": 5, "fashion": 6, "runway": 6, "improv": 8, "snatch_game": 8, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/BlackMajesty.webp", "promo": "Promos/BlackMajesty.webp"},
+    "Heartbreak Harley": {"rusical": 3, "comedy": 4, "dance": 6, "acting": 4, "fashion": 8, "runway": 8, "improv": 4, "snatch_game": 4, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Harley.webp", "promo": "Promos/Harley.webp"},
+    "Inkling Gurllll": {"rusical": 5, "comedy": 8, "dance": 6, "acting": 8, "fashion": 8, "runway": 10, "improv": 8, "snatch_game": 10, "lipsync": 6, "ball": 8, "makeover": 9, "image": "Mugs/Inkling.webp", "promo": "Promos/Inkling.webp"},
+    "Emerald Envy": {"rusical": 1, "comedy": 2, "dance": 3, "acting": 3, "fashion": 2, "runway": 3, "improv": 4, "snatch_game": 5, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Emerald.webp", "promo": "Promos/Emerald.webp"},
+    "The Dark Raven": {"rusical": 6, "comedy": 4, "dance": 6, "acting": 4, "fashion": 4, "runway": 4, "improv": 4, "snatch_game": 4, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/DarkRaven.webp", "promo": "Promos/DarkRaven.webp"},
+    "Fangeria Kickz": {"rusical": 7, "comedy": 7, "dance": 7, "acting": 7, "fashion": 8, "runway": 15, "improv": 8, "snatch_game": 10, "lipsync": 6, "ball": 6, "makeover": 6, "image": "Mugs/Fangeria.webp", "promo": "Promos/Fangeria.webp"},
+    "Shinobitch": {"rusical": 10, "comedy": 15, "dance": 9, "acting": 8, "fashion": 8, "runway": 8, "improv": 6, "snatch_game": 6, "lipsync": 8, "ball": 8, "makeover": 8, "image": "Mugs/Shinobitch.webp", "promo": "Promos/Shinobitch.webp"},
+    "Miss Eveelicious": {"rusical": 9, "comedy": 10, "dance": 9, "acting": 8, "fashion": 10, "runway": 11, "improv": 14, "snatch_game": 10, "lipsync": 8, "ball": 10, "makeover": 10, "image": "Mugs/MissEveelicious.webp", "promo": "Promos/MissEveelicious.webp"},
+    "La Lola": {"rusical": 15, "comedy": 10, "dance": 11, "acting": 12, "fashion": 11, "runway": 10, "improv": 13, "snatch_game": 9, "lipsync": 8, "ball": 14, "makeover": 6, "image": "Mugs/LaLola.webp", "promo": "Promos/LaLola.webp"},
+    "Zimfinity": {"rusical": 9, "comedy": 10, "dance": 9, "acting": 15, "fashion": 13, "runway": 10, "improv": 9, "snatch_game": 9, "lipsync": 6, "ball": 9, "makeover": 15, "image": "Mugs/Zimfinity.webp", "promo": "Promos/Zimfinity.webp"},
+    "Only Link": {"rusical": 9, "comedy": 8, "dance": 15, "acting": 9, "fashion": 10, "runway": 12, "improv": 8, "snatch_game": 8, "lipsync": 9, "ball": 8, "makeover": 8, "image": "Mugs/OnlyLink.webp", "promo": "Promos/Link.webp"}
 };
 
 let queen_stats_s09 = {
@@ -485,6 +502,19 @@ let challenges_s09 = {
     "The Gayest Ball Ever": {type: "ball", doubleWin: false, description: "Queens must present three looks for the Gayest Ball Ever."},
 };
 
+let challenges_s02 = {
+    "Oh. My. Gaga!": {type: "runway", doubleWin: false, description: "Queens must present two runway looks inspired by Lady Gaga."},
+    "She Done Already Done Brought It On": {type: "dance", doubleWin: false, description: "Queens must perform a cheerleading routine."},
+    "Draggily Ever After": {type: "fashion", doubleWin: false, description: "Queens must create a fairytale princess look and her sassy sidekick."},
+    "Good Morning Bitches": {type: "improv", doubleWin: true, description: "Queens must host a morning talk show."},
+    "Reality Stars: The Musical": {type: "rusical", doubleWin: false, description: "Queens must perform in a musical about the Kardashians."},
+    "Snatch Game": {type: "snatch_game", doubleWin: false, description: "Queens must impersonate celebrities in a game show setting."},
+    "9021-HO": {type: "acting", doubleWin: false, description: "Queens must act in a parody of 'Beverly Hills, 90210'."},
+    "RuPaul Roast": {type: "comedy", doubleWin: false, description: "Queens must perform a roast of Michelle Visage."},
+    "Your Pilot's On Fire": {type: "improv", doubleWin: true, description: "Queens must create, write, and star in their own TV pilots."},
+    "Makeovers: Crew Better Work": {type: "makeover", doubleWin: false, description: "Queens must give members of the 'Drag Race' crew a drag makeover."},
+    "The Gayest Ball Ever": {type: "ball", doubleWin: false, description: "Queens must present three looks for the Gayest Ball Ever."},
+};
 
 let challenges_s12 = {
     "I'm That Bitch": {type: "dance", doubleWin: false, description: "Queens must perform a choreographed lip-sync to the song 'I'm That Bitch'."},
@@ -558,6 +588,7 @@ let seasons = {
     '12': [cast_s12, challenges_s12, queen_stats_s12, false],
     '10': [cast_s10, challenges_s10, queen_stats_s10, false],
     '13': [cast_s13, challenges_s13, queen_stats_s13, false],
+    '2': [cast_s02, challenges_s02, queen_stats_s02, false],
     '9': [cast_s09, challenges_s09, queen_stats_s09, false],
     '7': [cast_s07, challenges_s07, queen_stats_s07, false],
     '3': [cast_s03, challenges_s03, queen_stats_s03, false],
